@@ -4,7 +4,7 @@ import { List } from "../atoms/List";
 import { NavLink } from "react-router-dom";
 import { ArrowCircleRightIcon, CirclesFourIcon } from "@phosphor-icons/react";
 import { Link } from "react-router-dom";
-import Logo from "/logoNoBgWhite.png";
+import Logo from "/logoNoBgWhite.webp";
 import { Image } from "../atoms/Image";
 
 
@@ -33,8 +33,9 @@ const NavBar = () => {
     return (
         <header className={`w-full h-auto bg-transparent overflow-x-hidden fixed z-50 top-0 left-0`}>
             <nav className={`w-full lg:h-28 md:h-24 h-20 ${navBarColor ? "bg-zinc-900" : " bg-transparent"} lg:px-16 md:px-9 px-8 flex justify-between items-center`}>
+                <link rel="preload" fetchpriority="high" as="image" href={Logo} type="image/webp"></link>
                 <Link to={`/`} className="font-extrabold flex items-center relative md:text-2xl text-lg">
-                    <Image className="md:h-24 h-20" alt="Redixc-Homepage" image={Logo} />
+                    <Image lazyLoading="eager" fetchpriority="high" className="md:h-24 h-20" alt="Redixc-Homepage" image={Logo} />
                     {/* <Text as="p" className="text-white font-argon">REDIXC</Text> */}
                 </Link>
                 <div className="lg:flex hidden items-center h-full gap-20">
@@ -62,7 +63,8 @@ const NavBar = () => {
                     <section className="w-full px-4 py-6 flex flex-col gap-16">
                         <div className="w-full flex pt-5 px-4 justify-between items-center">
                             <Link to={`/`} className="font-extrabold text-2xl">
-                                <Image className="h-20" alt="Redixc-Homepage" image={Logo} />
+                            <link rel="preload" fetchpriority="high" as="image" href={Logo} type="image/webp"></link>
+                                <Image lazyLoading="eager" fetchpriority="high" className="h-20" alt="Redixc-Homepage" image={Logo} />
                             </Link>
                             <div className="hamburger text-white cursor-pointer" onClick={handleToggle}>
                                 <ArrowCircleRightIcon size={25} color="currentColor" weight="light" />

@@ -1,5 +1,5 @@
 import { Image } from "../atoms/Image"
-import ContactImg from "../../assets/redixc/1.jpg"
+import ContactImg from "../../assets/redixc/1.webp"
 import { Text } from "../atoms/Text"
 import { ContactTexts } from "../particles/Data"
 import { Button } from "../atoms/Button"
@@ -14,7 +14,7 @@ const Contact = () => {
 
     return (
         <section className="w-full md:h-[400px] h-[500px] relative">
-            <Image alt="Contact Image" className="w-full h-full" objectCover="object-cover object-top" image={ContactImg} />
+            <Image lazyLoading="lazy" fetchpriority="low" alt="Contact Image" className="w-full h-full" objectCover="object-cover object-top" image={ContactImg} />
             <div className="w-full px-4 h-full absolute top-0 left-0 bg-zinc-900/70 flex flex-col justify-center items-center gap-2">
                 <Text as="p" className="tracking-widest text-amber-500 uppercase md:text-sm text-xs font-medium">
                     {ContactTexts.firstText}

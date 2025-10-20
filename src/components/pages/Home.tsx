@@ -2,7 +2,7 @@ import About from "../organs/About"
 import Contact from "../organs/Contact"
 import HeroSection from "../organs/HeroSection"
 import Membership from "../organs/Membership"
-import Offers from "../organs/Offers"
+// import Offers from "../organs/Offers"
 
 
 
@@ -11,7 +11,7 @@ const Home = () => {
         <>
             <HeroSection />
             <About />
-            <Offers />
+            {/* <Offers /> */}
             <Membership />
             {/* <Calculator /> */}
             {/* <Testimonials /> */}

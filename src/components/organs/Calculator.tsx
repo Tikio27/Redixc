@@ -24,7 +24,7 @@ const Calculator = () => {
                 </div>
 
                 <div className="w-full lg:h-[800px] md:h-[600px] h-[300px] md:order-2 order-1 grid">
-                    <Image alt="Offer Image" objectCover="object-cover" className="w-full h-full" image={CalImg} />
+                    <Image lazyLoading="lazy" fetchpriority="low" alt="Offer Image" objectCover="object-cover" className="w-full h-full" image={CalImg} />
                 </div>
             </main>
 

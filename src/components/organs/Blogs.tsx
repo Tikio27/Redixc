@@ -40,7 +40,7 @@ const Blogs = () => {
                     {
                         BlogTexts.blogNews.map((blog, index) => (
                             <Card key={index} className="flex flex-col justify-between bg-zinc-950 border-b-4 border-red-500">
-                                <Image alt={blog.title} className="w-full h-48" objectCover="object-cover" image={renderImage(index)} />
+                                <Image lazyLoading="lazy" fetchpriority="low" alt={blog.title} className="w-full h-48" objectCover="object-cover" image={renderImage(index)} />
                                 <Link to="/" className="flex flex-col lg:p-6 md:p-4 p-6 gap-2 group">
                                     <Text as="h3" className="text-amber-500 text-xs group-hover:underline font-semibold uppercase">{blog.caption}</Text>
                                     <Text as="h1" className="text-zinc-300 group-hover:underline text-base capitalize">{blog.title}</Text>

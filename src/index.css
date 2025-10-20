@@ -34,3 +34,8 @@ input[type=number] {
 .letter-spacing {
     letter-spacing: 8px;
 }
+
+img {
+  max-inline-size: 100%;
+  block-size: auto;
+}

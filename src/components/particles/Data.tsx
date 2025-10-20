@@ -6,21 +6,33 @@ export const NavLinks = [
     {
         name: "Sobre Nosotros",
         url: "/about"
+    },
+    {
+        name: "Legal",
+        url: "/legal"
     }
 ];
 
 export const HeroAboutTexts = [
     {
         Heading: "En Redixc, conectamos más que internet: conectamos oportunidades",
-        Paragraph: "Somos un equipo apasionado por la tecnología, comprometido con llevarfibra óptica de alta velocidada hogares y empresas, rompiendo barreras digitales con servicio humano y soporte real.",
-        Button: "¡Conoce nuestra historia!"
+        Paragraph: "",
+        Button: "¡Conoce más sobre nosotros!"
+    }
+]
+
+export const HeroLegalTexts = [
+    {
+        Heading: "En Redixc, creemos que la claridad legal es parte de nuestro servicio.",
+        Paragraph: "Aquí encontrarás toda la información relevante para que navegues con seguridad. ¿Preguntas? Contacta a nuestro equipo: info@redixc.net",
+        Button: "Consulta nuestros documentos"
     }
 ]
 
 export const HeroTexts = [
     {
-        Heading: "La fibra que te conecta al mundo",
-        Paragraph: "¡Bienvenidos a una nueva era!. En REDIXC, llevamos la conexión a otro nivel con fibra óptica de alta velocidad para que trabajes, estudies, disfrutes y te entretengas sin interrupciones",
+        Heading: "REDIXC La fibra que te conecta al mundo",
+        Paragraph: "En REDIXC, llevamos la conexión a otro nivel para que trabajes, estudies, disfrutes y te entretengas.",
         Button: "¡Descubre el poder de una conexión real y déjate sorprender!"
     }
     // {
@@ -39,14 +51,14 @@ export const HeroTexts = [
 export const AboutTexts = {
     firstText: "Redixc",
     secondText: "Bienvenido",
-    caption: "",
-    paragraph1: "¿Cansado de internet lento que se traba cuando más lo necesitas? ¡Nosotros también! Por eso en Redixc te llevamos la fibra más rápida y estable, para que navegues, trabajes, veas pelis o juegues sin frustraciones.",
+    caption: "Con Redixc disfruta Internet rápido, confiable y con cobertura local en Santiago Ixcuintla, Nayarit y sus localidades",
+    paragraph1: "Navega, trabaja, o disfruta de tus series, películas y juegos. Sabemos lo importante que es estar conectado al mundo, REDIXC está para hacerlo simple.",
 }
 
 export const AboutSectionTexts = {
     firstText: "La fibra que te conecta al mundo",
     secondText: "REDIXC",
-    caption: "Redixc nació para revolucionar el acceso a internet. No somos solo proveedores; somos facilitadores de educación, trabajo y entretenimiento sin límites.",
+    caption: "En Redixc creemos en un internet que conecta oportunidades. Llevamos el internet para que estudies, trabajes o disfrutes de tu entretenimiento.",
     mision: "Misión: Ofrecer conexiones estables y rápidas, con tecnología de punta y atención personalizada.",
     vision: "Visión: Ser líderes en cobertura de fibra óptica, llevando inclusión digital a cada rincón.",
     values: "Valores: Transparencia, soporte personalizado y mejora continua. ¡Tu satisfacción es nuestra métrica!"
@@ -87,6 +99,18 @@ export const LegalTexts = {
             link: "/docs/TituloDeConcesion.pdf",
             fileName: "Titulo de Consesion.pdf"
         },
+        {
+            listCaption: "Contrato de Adhesión aprobado por Profeco",
+            text: "Registro de contrato de adhesión de telecomunicaciones",
+            link: "/docs/Contrato_Adhesion_aprobado_por_Profeco.pdf",
+            fileName: "Contrato de Adhesion aprobado por PROFECO.pdf"
+        },
+        {
+            listCaption: "Contrato de Adhesión del Servicio de Internet",
+            text: "Contrato de prestación del servicio de internet fijo",
+            link: "/docs/Contrato_Adhesion_Servicio_de_Internet.pdf",
+            fileName: "Contrato de Adhesion del Servicio de Internet.pdf"
+        }
     ],
 }
 
@@ -94,25 +118,55 @@ export const MembershipPlans = {
     firstText: "Nuestros Planes de Internet",
     secondText: "En Redixc no hay un plan único para todos, porque sabemos que cada hogar y negocio tiene necesidades diferentes. ¡Elige el tuyo!",
     thirdText: "BENEFICIOS COMUNES A TODOS LOS PLANES",
-    benefits: ["Garantía de velocidad: Si no cumple, te bonificamos.", "Soporte: Atendido por técnicos locales (no chatbots).", "Sin trampas: Precios fijos, sin aumentos sorpresa.", "Ventaja Redixc: Te regalamos 15 días de prueba. Si no te convence, te devolvemos tu dinero."],
+    benefits: ["Sin contratos forzosos (Mes a mes)", "Soporte: Atendido por técnicos locales (no chatbots).", "Sin trampas: Precios fijos, sin aumentos sorpresa."],
     cards: [
         {
             amount: 300,
             duration: "mes",
-            caption: 'BÁSICO | "El Esencial"',
-            benefits: ["Velocidad: 40 Mbps de bajada, 20 Mbps de subida", "Ideal para navegar, redes sociales", "Correos electrónicos y videollamadas ocasionales"]
+            description: "Para estar conectado al mundo y no perderte nada.",
+            caption: 'BÁSICO',
+            speed: "30 Mbps / 20 Mbps",
+            benefits: ["Ideal para navegar, redes sociales", "Correos electrónicos"]
+        },
+        {
+            amount: 350,
+            duration: "mes",
+            caption: 'ESENCIAL',
+            speed: "35 Mbps / 25 Mbps",
+            description: "Ideal para familias pequeñas que usan internet todos los días.",
+            benefits: ["Videollamadas ocasionales",  "Streaming en calidad estándar"],
         },
         {
             amount: 400,
             duration: "mes",
-            caption: 'PLUS | "Entretenimiento Sin Límites"',
-            benefits: ["Velocidad: 60 Mbps de bajada, 30 Mbps de subida", "Streaming (Netflix, YouTube, HBO Max) sin buffering", "Videollamadas para trabajo o familia", "Música y gaming casual (sin lag)", "Sin contratos forzosos (mes a mes)", "Router WiFi 6 incluido"]
+            description: "Navegación rápida y fluida para toda la familia.",
+            caption: 'PLUS',
+            speed: "50 Mbps / 40 Mbps",
+            benefits: ["Disfruta de tus plataformas de video favoritas", "Videollamadas para trabajo o familia"]
         },
         {
             amount: 500,
             duration: "month",
-            caption: 'Premium | "Domina la red"',
-            benefits: ["Velocidad: 80 Mbps de bajada, 50 Mbps de subida", "Juegos online (sin delays)", "Descargas mas rápidas (¡juegos en minutos!)", "Transmisión en Twitch/YouTube sin cortes"]
+            description: "Para hogares activos con varios dispositivos.",
+            caption: 'PREMIUM',
+            speed: "80 Mbps / 50 Mbps",
+            benefits: ["Juegos online", "Descargas mas rápidas"]
+        },
+        {
+            amount: 600,
+            duration: "month",
+            description: "Conéctate con más velocidad, más dispositivos y más comodidad.",
+            caption: 'ULTRA',
+            speed: "100 Mbps / 80 Mbps",
+            benefits: ["Streaming en 4K", "Gaming y trabajo remoto avanzado"]
+        },
+        {
+            amount: 800,
+            duration: "month",
+            description: "Potencia total, ideal para usuarios exigentes.",
+            caption: 'MAX',
+            speed: "150 Mbps / 100 Mbps",
+            benefits: ["Máximo rendimiento y velocidad", "Streaming y gaming simultáneo"]
         }
     ]
 }
@@ -178,9 +232,9 @@ export const BlogTexts = {
 }
 
 export const FooterTexts = {
-    underLogoText: 'En Redixc no solo te ofrecemos fibra óptica; somos tu aliado para conquistar el mundo digital sin límites. Nuestra misión es romper barreras con una conexión rápida, estable y humana, para que trabajes, estudies, juegues o crees con la certeza de que tu red nunca te fallará. ¿Por qué elegirnos? ✨ Creamos experiencias: Que tus videollamadas, streaming o partidas online fluyan como si el mundo estuviera a tu ritmo.✨ Te entendemos: Por eso nuestro soporte técnico habla tu idioma (literal y figuradamente). "La fibra que te conecta al mundo" es solo el comienzo. Tu potencial, nuestra conexión.',
+    underLogoText: 'En Redixc no solo te ofrecemos fibra óptica; somos tu aliado para conectarte al mundo digital. "La fibra que te conecta al mundo" es solo el comienzo.',
     quickLinks: {
-        caption: "Quick Links",
+        caption: "Mapa del sitio",
         links: [
             {
                 name: "Inicio",
@@ -191,36 +245,24 @@ export const FooterTexts = {
                 url: "/about"
             },
             {
-                name: "Schedule",
-                url: "/schedule"
-            },
-            {
-                name: "Gallery",
-                url: "/gallery"
-            },
-            {
-                name: "News",
-                url: "/news"
-            },
-            {
-                name: "Contacts",
-                url: "/contact"
-            },
-        ]
-    },
-    contacts: {
-        caption: "Quick Contacts",
-        names: [
-            {
-                name: "11567 Santa Monica Blvd, Los Angeles, CA 90025, United States",
-            },
-            {
-                name: "gym_nex@example.com",
-            },
-            {
-                name: "+1 424-248-8496",
+                name: "Legal",
+                url: "/legal"
             }
         ]
     },
-    copyright: "Copyright 2025. All Right Reserved"
+    contacts: {
+        caption: "Contacto",
+        names: [
+            {
+                name: "Rafael Mejía Amaral #55, EL Botadero, Santiago Ixcuintla, Nayarit, C.P. 63575",
+            },
+            {
+                name: "info@redixc.net",
+            },
+            {
+                name: "+52 311-144-7676",
+            }
+        ]
+    },
+    copyright: "Redixc – Internet de fibra óptica en Santiago Ixcuintla, Nayarit y localidades cercanas como El Botadero, Pueblo Nuevo, El Carrizo y Villa Juarez. Conexión rápida, estable y con soporte local. © 2025 Redixc.net"
 }

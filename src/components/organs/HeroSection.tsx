@@ -1,8 +1,8 @@
 import { useCallback, useRef } from "react";
 import { Image } from "../atoms/Image"
-import HeroImg1 from "../../assets/hero/1.jpg"
-import HeroImg2 from "../../assets/hero/2.jpg"
-import HeroImg3 from "../../assets/hero/4.jpg"
+import HeroImg1 from "../../assets/hero/1.webp"
+// import HeroImg2 from "../../assets/hero/2.webp"
+// import HeroImg3 from "../../assets/hero/4.webp"
 import { HeroTexts } from "../particles/Data";
 import Slider from "react-slick";
 import { Text } from "../atoms/Text";
@@ -12,21 +12,6 @@ import { Slide, Zoom } from "react-awesome-reveal";
 const HeroSection = () => {
 
     const sliderRef = useRef<Slider | null>();
-
-    // Function for next button
-    // const next = () => {
-    //     if (sliderRef.current) {
-    //         sliderRef.current.slickNext();
-
-    //     }
-    // };
-    // // function for previous button
-    // const previous = () => {
-    //     if (sliderRef.current) {
-    //         sliderRef.current.slickPrev();
-    //     }
-
-    // };
 
     const settings = {
         dots: false,
@@ -43,10 +28,10 @@ const HeroSection = () => {
         switch (element) {
             case 0:
                 return HeroImg1;
-            case 1:
-                return HeroImg2;
-            case 2:
-                return HeroImg3;
+            // case 1:
+            //     return HeroImg2;
+            // case 2:
+            //     return HeroImg3;
             default:
                 return "";
         }
@@ -57,21 +42,25 @@ const HeroSection = () => {
                 {
                     HeroTexts.map((hero, index) => (
                         <main className="w-full lg:h-screen md:h-[50vh] h-screen relative bg-zinc-900 overflow-x-hidden" key={index}>
+                            <link rel="preload" fetchpriority="high" as="image" href={renderProfileImg(index)} type="image/webp"></link>
                             <Zoom className="h-full">
-                                <Image className="md:w-[60%] w-full md:h-full h-1/2" alt="HeroImg1" objectCover="object-cover" image={renderProfileImg(index)} />
+                                <Image lazyLoading="eager" fetchpriority="high" className="md:w-[60%] w-full md:h-full h-1/2" alt="HeroImg1" objectCover="object-cover" image={renderProfileImg(index)} />
                             </Zoom>
 
                             <div className="md:w-[50%] w-full md:h-full h-1/2 absolute md:top-0 top-1/2 right-0 bg-zinc-900 flex flex-col items-center md:justify-center justify-start lg:gap-8 md:gap-4 gap-2 lg:px-20 md:px-6 px-4 overflow-x-hidden">
-                                <Text as="h1" className="lg:text-5xl md:text-4xl text-4xl md:mt-10 mt-10 text-zinc-100 font-extrabold text-center">
+                                
                                     <Slide direction="right">
-                                        {hero.Heading}
+                                        <Text as="h1" className="lg:text-5xl md:text-4xl text-4xl md:mt-10 mt-10 text-zinc-100 font-extrabold text-center">
+                                            {hero.Heading}
+                                        </Text>
                                     </Slide>
-                                </Text>
-                                <Text as="p" className="lg:text-lg text-base text-zinc-400 my-4 text-center">
+                                
                                     <Slide direction="left">
-                                        {hero.Paragraph}
+                                        <Text as="h2" className="lg:text-lg text-base text-zinc-400 my-4 text-center">
+                                            {hero.Paragraph}
+                                        </Text>
                                     </Slide>
-                                </Text>
+                                
                                 <div className="flex items-center gap-8 max-w-full">
                                     <Slide direction="up">
                                         <Text className="text-center max-w-full px-10 font-medium text-white py-2.5 bg-gradient-to-r whitespace-wrap from-red-500 to-amber-500">

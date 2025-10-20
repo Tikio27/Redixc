@@ -98,7 +98,7 @@ const Testimonials = () => {
                                                 <StarHalfIcon size={12} color="currentColor" weight="fill" />
                                             </div>
                                         </div>
-                                        <Image className="" objectCover="object-cover" image={renderClients(index)} alt={feedback.person} />
+                                        <Image  lazyLoading="lazy" fetchpriority="low" className="" objectCover="object-cover" image={renderClients(index)} alt={feedback.person} />
                                     </Card>
                                 </div>
 
