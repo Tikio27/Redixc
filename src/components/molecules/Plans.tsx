@@ -1,9 +1,19 @@
+import { DownloadSimpleIcon, UploadSimpleIcon } from "@phosphor-icons/react";
+import { DownloadLink } from "./DownloadLink";
+
 type PlanesRedixcProps = {
     name: string,
-    speed: string,
+    speed: {
+      download: string,
+      upload: string
+    },
     price: number,
     description: string,
-    characteristics: string[]
+    characteristics: string[],
+    document: {
+      link: string,
+      text: string
+    }
 };
 export const PlanCard = ({
   name,
@@ -11,6 +21,7 @@ export const PlanCard = ({
   price,
   description,
   characteristics,
+  document,
   ...rest
 }: PlanesRedixcProps) => {
   const handleClick = () => {
@@ -38,11 +49,15 @@ export const PlanCard = ({
       <div className="mb-4 flex items-baseline justify-between">
         <div>
           <h2 className="text-xl font-semibold text-zinc-100">{name}</h2>
-          <p className="text-2xl font-bold text-amber-500">{speed}</p>
+          <div className="flex gap-2">
+            <p className="text-base font-bold text-amber-500 flex items-center gap-1"><DownloadSimpleIcon size={20} />{speed.download}</p>
+            <span className="text-xl font-bold text-amber-500">/</span>
+            <p className="text-base font-bold text-amber-500 flex items-center gap-1"><UploadSimpleIcon size={20} />{speed.upload}</p>
+          </div>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-bold text-amber-500">${price}</p>
-          {/* <p className="text-sm text-gray-400">{personas}</p> */}
+          <p className="text-2xl font-bold text-amber-500">${price}*</p>
+          <p className="text-sm text-gray-400">mensual</p>
         </div>
       </div>
 
@@ -54,6 +69,11 @@ export const PlanCard = ({
           </li>
         ))}
       </ul>
+      <div className="flex items-center">
+        <span className="mr-2 text-amber-500">✔</span>
+        <DownloadLink className="hover:underline text-gray-400" url={document.link} fileName={document.text} text="Consultar formato simple IFT"/>
+      </div>
+      
 
       <div className="mt-4 flex items-center justify-between">
         <span className="text-sm text-gray-400">{description}</span>

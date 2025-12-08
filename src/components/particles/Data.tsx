@@ -110,6 +110,12 @@ export const LegalTexts = {
             text: "Contrato de prestación del servicio de internet fijo",
             link: "/docs/Contrato_Adhesion_Servicio_de_Internet.pdf",
             fileName: "Contrato de Adhesion del Servicio de Internet.pdf"
+        },
+        {
+            listCaption: "Características Especificaciones y Alcances Paquetes Internet",
+            text: "Características Especificaciones y Alcances Paquetes Internet",
+            link: "/docs/Caracteristicas_Especificaciones_y_Alcances_Paquetes_Internet.pdf",
+            fileName: "Caracteristicas_Especificaciones_y_Alcances_Paquetes_Internet.pdf"
         }
     ],
 }
@@ -118,6 +124,11 @@ export const MembershipPlans = {
     firstText: "Nuestros Planes de Internet",
     secondText: "En Redixc no hay un plan único para todos, porque sabemos que cada hogar y negocio tiene necesidades diferentes. ¡Elige el tuyo!",
     thirdText: "BENEFICIOS COMUNES A TODOS LOS PLANES",
+    commonPlanText: "* Los precios están en moneda nacional e incluyen los impuestos aplicables",
+    iftVisor: {
+        url: "https://tarifas.ift.org.mx/ift_visor/",
+        text: "Para mayor información respecto a las tarifas puede consultar el visor de tarifas de la Comisión Reguladora de Telecomunicaciones, en la liga: "
+    },
     benefits: ["Sin contratos forzosos (Mes a mes)", "Soporte: Atendido por técnicos locales (no chatbots).", "Sin trampas: Precios fijos, sin aumentos sorpresa."],
     cards: [
         {
@@ -125,48 +136,90 @@ export const MembershipPlans = {
             duration: "mes",
             description: "Para estar conectado al mundo y no perderte nada.",
             caption: 'BÁSICO',
-            speed: "30 Mbps / 20 Mbps",
-            benefits: ["Ideal para navegar, redes sociales", "Correos electrónicos"]
+            speed: {
+                download: "30 Mbps",
+                upload: "20 Mbps"
+            },
+            benefits: ["Ideal para navegar, redes sociales", "Correos electrónicos", "Número de inscripción IFT: 2233240"],
+            document: {
+                link: "/docs/formatos/FormatoSimplificado_2233240.pdf",
+                text: "Formato Simplificado 2233240"
+            }
         },
         {
             amount: 350,
             duration: "mes",
             caption: 'ESENCIAL',
-            speed: "35 Mbps / 25 Mbps",
+            speed: {
+                download: "35 Mbps",
+                upload: "25 Mbps"
+            },
             description: "Ideal para familias pequeñas que usan internet todos los días.",
-            benefits: ["Videollamadas ocasionales",  "Streaming en calidad estándar"],
+            benefits: ["Videollamadas ocasionales",  "Streaming en calidad estándar",  "Número de inscripción IFT: 2233241"],
+            document: {
+                link: "/docs/formatos/FormatoSimplificado_2233241.pdf",
+                text: "Formato Simplificado 2233241"
+            }
         },
         {
             amount: 400,
             duration: "mes",
             description: "Navegación rápida y fluida para toda la familia.",
             caption: 'PLUS',
-            speed: "50 Mbps / 40 Mbps",
-            benefits: ["Disfruta de tus plataformas de video favoritas", "Videollamadas para trabajo o familia"]
+            speed: {
+                download: "50 Mbps",
+                upload: "40 Mbps"
+            },
+            benefits: ["Disfruta de tus plataformas de video favoritas", "Videollamadas para trabajo o familia", "Número de inscripción IFT: 2233242"],
+            document: {
+                link: "/docs/formatos/FormatoSimplificado_2233242.pdf",
+                text: "Formato Simplificado 2233242"
+            }
         },
         {
             amount: 500,
             duration: "month",
             description: "Para hogares activos con varios dispositivos.",
             caption: 'PREMIUM',
-            speed: "80 Mbps / 50 Mbps",
-            benefits: ["Juegos online", "Descargas mas rápidas"]
+            speed: {
+                download: "80 Mbps",
+                upload: "50 Mbps"
+            },
+            benefits: ["Juegos online", "Descargas mas rápidas", "Número de inscripción IFT: 2233243"],
+            document: {
+                link: "/docs/formatos/FormatoSimplificado_2233243.pdf",
+                text: "Formato Simplificado 2233243"
+            }
         },
         {
             amount: 600,
             duration: "month",
             description: "Conéctate con más velocidad, más dispositivos y más comodidad.",
             caption: 'ULTRA',
-            speed: "100 Mbps / 80 Mbps",
-            benefits: ["Streaming en 4K", "Gaming y trabajo remoto avanzado"]
+            speed: {
+                download: "100 Mbps",
+                upload: "80 Mbps"
+            },
+            benefits: ["Streaming en 4K", "Gaming y trabajo remoto avanzado", "Número de inscripción IFT: 2233244"],
+            document: {
+                link: "/docs/formatos/FormatoSimplificado_2233244.pdf",
+                text: "Formato Simplificado 2233244"
+            }
         },
         {
             amount: 800,
             duration: "month",
             description: "Potencia total, ideal para usuarios exigentes.",
             caption: 'MAX',
-            speed: "150 Mbps / 100 Mbps",
-            benefits: ["Máximo rendimiento y velocidad", "Streaming y gaming simultáneo"]
+            speed: {
+                download: "150 Mbps",
+                upload: "100 Mbps"
+            },
+            benefits: ["Máximo rendimiento y velocidad", "Streaming y gaming simultáneo", "Número de inscripción IFT: 2233245"],
+            document: {
+                link: "/docs/formatos/FormatoSimplificado_2233245.pdf",
+                text: "Formato Simplificado 2233245"
+            }
         }
     ]
 }

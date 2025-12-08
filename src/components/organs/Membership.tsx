@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 import { List } from "../atoms/List"
 import { Text } from "../atoms/Text"
 // import { Card } from "../molecules/Card"
@@ -16,13 +17,13 @@ const Membership = () => {
             <main className="grid my-10 lg:w-[90%] md:w-[96%] w-[90%] md:grid-cols-2 xl:grid-cols-3 items-center gap-8 md:gap-4 lg:gap-8 auto-rows-fr">
                 {
                     MembershipPlans.cards.map((card, index) => (
-                        
-                        <PlanCard key={index} name={card.caption} speed={card.speed} price={card.amount} description={card.description} characteristics={card.benefits} />
+                        <PlanCard key={index} name={card.caption} speed={card.speed} price={card.amount} description={card.description} characteristics={card.benefits} document={card.document} />
                     ))
                 }
                 
             </main>
-            <Text as="p" className="text-zinc-100">{MembershipPlans.thirdText}</Text> 
+            <Text as="p" className="text-amber-500 my-4 font-extrabold text-center">{MembershipPlans.commonPlanText}</Text> 
+            <Text as="h2" className="text-amber-500 font-extrabold">{MembershipPlans.thirdText}</Text> 
             <ul className="flex flex-col items-center text-center">
                 {
                     MembershipPlans.benefits.map((benefit, index) => (
@@ -30,6 +31,11 @@ const Membership = () => {
                     ))
                 }
             </ul>
+             
+            <Text as="p" className="text-amber-500 text-center">
+                {MembershipPlans.iftVisor.text}
+                <Link target="_blank"  to={MembershipPlans.iftVisor.url} className="hover:underline text-zinc-100">{MembershipPlans.iftVisor.url}</Link>
+            </Text>
         </section>
     )
 }

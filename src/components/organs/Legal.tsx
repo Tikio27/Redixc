@@ -4,7 +4,7 @@ import { Text } from "../atoms/Text"
 import { LegalTexts } from "../particles/Data"
 import { List } from "../atoms/List"
 import { useCallback } from "react"
-import { GavelIcon,  HandshakeIcon,  ScalesIcon, UserPlusIcon } from "@phosphor-icons/react"
+import { ClipboardTextIcon, GavelIcon,  HandshakeIcon,  ScalesIcon, UserPlusIcon } from "@phosphor-icons/react"
 import { Fade } from "react-awesome-reveal"
 import { DownloadLink } from "../molecules/DownloadLink"
 
@@ -21,6 +21,8 @@ const Legal = () => {
                 return <HandshakeIcon size={50} color="currentColor" weight="light" />;
             case 3:
                 return <UserPlusIcon size={50} color="currentColor" weight="light" />;
+            case 4:
+                return <ClipboardTextIcon size={50} color="currentColor" weight="light" />
             default:
                 return "";
         }
