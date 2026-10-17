@@ -39,8 +39,8 @@ V7: Header is sticky at top on every route, with opaque theme background, visibl
 
 Homepage hero: use 70% width for text and 30% for the photo above the mobile breakpoint. Allow the copy container to use that space without the old width cap; retain centered, stacked text and photo on mobile.
 
-Navigation: keep a compact header (64px desktop/tablet, 60px mobile) with a 112px desktop logo. Keep sticky anchor offsets synchronized with the header height.
+Navigation: keep a compact header (56px on desktop, tablet and mobile) with a 112px desktop logo. Keep sticky anchor offsets synchronized with the header height.
 
 Header logo: use the slogan-free logo-mark SVG variants in both themes. Display “La fibra que te une al mundo.” in the homepage hero instead of the previous fiber/local-service description.
 
-Navigation content uses a centered 960px maximum width; center logo, links and controls as one group with fixed gaps and no auto margin between logo and links. Homepage headline wraps naturally, with the blue phrase on its own line; allow hero height to grow with its content to prevent clipping.
+Navigation content retains the centered 1080px maximum width and distributed layout. User feedback concerns height and vertical centering, not a narrower horizontal group. Trim blank space in the header SVG viewBox to center the visible logo vertically. Homepage headline wraps naturally, with the blue phrase on its own line; allow hero height to grow with its content to prevent clipping.

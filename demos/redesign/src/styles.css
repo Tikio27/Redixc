@@ -149,12 +149,12 @@ html,body,#root{margin:0;min-height:100%;background:var(--bg)}
 @media(max-width:600px){.connection-step-grid{gap:16px}.connection-step-grid>li{display:flex;padding:24px;text-align:left;gap:0}.connection-step-grid h3{font-size:23px;min-height:0;margin-top:19px}.connection-step-grid p{font-size:15px;min-height:0;margin:12px 0 22px}.connection-step-grid .connection-step-number{position:static;font-size:14px;width:auto;height:auto}.connection-step-action{font-size:15px}.connection-step-top{height:36px}}
 
 /* V7: persistent navigation across all pages and themes. */
-:root{--nav-height:64px}
+:root{--nav-height:56px}
 html{scroll-padding-top:calc(var(--nav-height) + 16px)}
 .app.hybrid .header{position:sticky;top:0;z-index:30;background:var(--bg);box-shadow:0 1px 0 var(--line)}
 .hybrid .mobile-nav{max-height:calc(100dvh - var(--nav-height));overflow-y:auto;overscroll-behavior:contain}
-@media(max-width:850px){:root{--nav-height:64px}}
-@media(max-width:600px){:root{--nav-height:60px}}
+@media(max-width:850px){:root{--nav-height:56px}}
+@media(max-width:600px){:root{--nav-height:56px}}
 
 /* Compact centered navigation and fluid homepage heading. */
 .hybrid .header-inner{margin-inline:auto}
@@ -167,11 +167,15 @@ html{scroll-padding-top:calc(var(--nav-height) + 16px)}
 }
 @media(min-width:1800px){.homepage-v5.hybrid.page-inicio .hero{min-height:680px}}
 
-/* Center the navigation as one compact group, without an expanding spacer. */
+/* Compact height with vertically centered navigation content. */
 .hybrid .header .brand{width:112px}
 @media(min-width:851px){
-  .hybrid .header-inner{max-width:960px;justify-content:center;gap:32px}
-  .hybrid .desktop-nav{margin-left:0!important;gap:24px}
+  .hybrid .header-inner{max-width:1080px;justify-content:space-between;gap:26px}
+  .hybrid .desktop-nav{margin-left:auto!important;gap:24px}
   .hybrid .header-actions{margin-left:0;gap:14px}
 }
 @media(max-width:850px){.hybrid .header .brand{width:105px}}
+
+.hybrid .header-inner,.hybrid .desktop-nav,.hybrid .header-actions{align-items:center}
+.hybrid .header .brand{display:flex;align-items:center;align-self:center}
+.hybrid .header .brand img{display:block;width:100%;height:auto}
