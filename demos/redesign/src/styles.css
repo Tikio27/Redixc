@@ -179,3 +179,18 @@ html{scroll-padding-top:calc(var(--nav-height) + 16px)}
 .hybrid .header-inner,.hybrid .desktop-nav,.hybrid .header-actions{align-items:center}
 .hybrid .header .brand{display:flex;align-items:center;align-self:center}
 .hybrid .header .brand img{display:block;width:100%;height:auto}
+
+/* Footer without repeated branding, with readable mobile navigation. */
+.hybrid .footer-columns{grid-template-columns:1fr 1.35fr 1fr}
+.hybrid .footer-columns>div{min-width:0}
+@media(max-width:600px){
+  .hybrid .footer-columns{grid-template-columns:1fr;gap:24px;padding-block:28px}
+  .hybrid .footer-columns h3{font-size:15px;margin-bottom:10px}
+  .hybrid .footer-columns>div>a,.hybrid .footer-columns>div>span,.hybrid .footer-columns>div>button{font-size:14px;min-height:44px;margin-top:0;line-height:1.5;overflow-wrap:anywhere}
+  .hybrid .footer-navigation{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px}
+  .hybrid .footer-navigation h3{grid-column:1/-1}
+  .hybrid .footer-contact{border-top:1px solid var(--line);padding-top:24px}
+  .hybrid .footer-columns .footer-chat>button{justify-content:center;gap:10px;width:100%;min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--accent);font-weight:700}
+  .hybrid .footer-fiber .footer-bottom{font-size:12px;line-height:1.6;gap:8px;padding-block:20px}
+  .hybrid .footer-bottom>a{display:flex;align-items:center;min-height:44px}
+}

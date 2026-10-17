@@ -44,3 +44,5 @@ Navigation: keep a compact header (56px on desktop, tablet and mobile) with a 11
 Header logo: use the slogan-free logo-mark SVG variants in both themes. Display “La fibra que te une al mundo.” in the homepage hero instead of the previous fiber/local-service description.
 
 Navigation content matches the main container: centered, maximum 1280px wide with 40px side gutters on desktop. Align the logo at its left edge and theme controls at its right edge; retain the distributed layout. User feedback concerns height and vertical centering, not a narrower horizontal group. Trim blank space in the header SVG viewBox to center the visible logo vertically. Homepage headline wraps naturally, with the blue phrase on its own line; allow hero height to grow with its content to prevent clipping.
+
+Footer: omit the duplicate logo because branding stays visible in the sticky header. On mobile use full-width sections, a two-column navigation list, readable 14px links with 44px touch targets, and a full-width WhatsApp action.
