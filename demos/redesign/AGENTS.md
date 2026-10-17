@@ -50,3 +50,17 @@ Footer: omit the duplicate logo because branding stays visible in the sticky hea
 Footer structure: exactly two blocks on desktop and mobile: Navegación with all page links on the left, Contáctanos with phone, email, location and WhatsApp on the right.
 
 Mobile footer density: user requests less height; use 28px link rows, 14px section padding, 6px heading gap and compact 10px legal copy. Preserve the two-column structure.
+
+Footer desktop revision: preserve the latest compact mobile layout. Above 600px use a full-width theme-aware footer surface, horizontal navigation links, organized contact grid and a distinct legal bottom row. Do not commit or push any further changes until the user explicitly approves them.
+
+Nosotros values section: use three theme-aware bordered cards with icon tiles on desktop, compact stacked cards with icons beside the text on mobile. Preserve the existing Cercanía, Claridad and Conexión copy. Changes remain local pending approval.
+
+Values cards: align the icon and title horizontally in one row on desktop as well as mobile; put the desktop description beneath that row.
+
+Apply the horizontal icon/title card heading consistently to help options (Quiero contratar, Ya soy cliente) and the coverage query panel, with descriptions and actions below. Keep all edits local pending approval.
+
+Card motion: subtle hover elevation and border/shadow feedback for values, help, plans and connection steps; keyboard focus feedback for actionable cards. Honor prefers-reduced-motion and limit hover transforms to fine pointers. Keep changes local until approval.
+
+Scroll animation: sections enter once with a gentle fade and 24px vertical drift, with staggered card entrances. Keep initial viewport visible, reveal focused content immediately, clean up on route changes and respect live reduced-motion preferences. No continuous scroll handlers or forced parallax. Keep edits local pending approval.
+
+Mobile footer preview: user prefers the desktop grouping adapted into two stacked rows: horizontal wrapping navigation above a two-column contact grid. Match the desktop theme-aware background and compact spacing. Keep changes local pending approval.

@@ -195,3 +195,102 @@ html{scroll-padding-top:calc(var(--nav-height) + 16px)}
   .hybrid .footer-fiber .footer-bottom{font-size:10px;line-height:1.5;gap:2px;padding-block:10px}
   .hybrid .footer-bottom>a{display:flex;align-items:center;min-height:28px}
 }
+
+/* Desktop footer has its own layout; compact mobile rules stay above. */
+@media(min-width:601px){
+  .hybrid .footer{position:relative;isolation:isolate;width:calc(100% - 80px);max-width:1280px;margin:40px auto 0;padding-bottom:0}
+  .hybrid .footer::before{content:"";position:absolute;inset:0 calc(50% - 50vw);z-index:-1;background:var(--surface2);border-top:1px solid var(--line)}
+  .hybrid .footer-columns{grid-template-columns:1fr 1fr;gap:64px;border-top:0;margin:0;padding:36px 0 28px}
+  .hybrid .footer-columns h3{font-size:15px;line-height:1.4;margin:0 0 14px}
+  .hybrid .footer-navigation{display:flex;flex-wrap:wrap;align-items:center;gap:0 24px;align-content:start}
+  .hybrid .footer-navigation h3{flex-basis:100%}
+  .hybrid .footer-columns>div>a,.hybrid .footer-columns>div>span,.hybrid .footer-columns>div>button{font-size:14px;line-height:1.5;margin:0;min-height:36px}
+  .hybrid .footer-contact{display:grid;grid-template-columns:1fr 1fr;column-gap:24px;row-gap:4px}
+  .hybrid .footer-contact h3{grid-column:1/-1;margin-bottom:10px}
+  .hybrid .footer-contact>a,.hybrid .footer-contact>span{overflow-wrap:anywhere}
+  .hybrid .footer-contact>.footer-whatsapp{color:var(--accent);font-weight:700}
+  .hybrid .footer-fiber .footer-bottom{align-items:center;font-size:12px;line-height:1.5;padding-block:16px;gap:24px}
+}
+@media(min-width:601px) and (max-width:900px){
+  .hybrid .footer-columns{gap:32px}
+  .hybrid .footer-contact{grid-template-columns:1fr}
+  .hybrid .footer-navigation{gap:0 18px}
+}
+
+/* Values: distinct cards with a consistent icon and text hierarchy. */
+.hybrid .values-grid{gap:24px;padding-block:40px 56px}
+.hybrid .values-grid article{display:grid;grid-template-columns:56px minmax(0,1fr);gap:18px;align-content:start;align-items:center;padding:30px;border:1px solid var(--line);border-radius:20px;background:var(--surface2);min-width:0}
+.hybrid .values-grid .value-icon{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border:1px solid var(--line);border-radius:16px;background:var(--surface);margin:0}
+.hybrid .values-grid .value-icon svg{margin:0;color:var(--accent)}
+.hybrid .values-grid h3{font-size:25px;line-height:1.2;letter-spacing:-.6px}
+.hybrid .values-grid p{grid-column:1/-1;font-size:15px;line-height:1.7;margin:0;max-width:34ch}
+@media(max-width:900px) and (min-width:601px){
+  .hybrid .values-grid{gap:16px}
+  .hybrid .values-grid article{padding:22px}
+  .hybrid .values-grid h3{font-size:23px}
+}
+@media(max-width:600px){
+  .hybrid .values-grid{gap:12px;padding-block:24px 32px}
+  .hybrid .values-grid article{display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px 16px;padding:20px;border-radius:16px}
+  .hybrid .values-grid .value-icon{grid-row:1;width:44px;height:44px;border-radius:12px;margin:0}
+  .hybrid .values-grid .value-icon svg{width:26px;height:26px}
+  .hybrid .values-grid h3{font-size:21px;align-self:center}
+  .hybrid .values-grid p{grid-column:2;font-size:14px;line-height:1.6;margin:0;max-width:none}
+}
+
+/* Shared horizontal icon/title treatment for help and coverage cards. */
+.hybrid .card-heading{display:flex;align-items:center;gap:18px}
+.hybrid .card-heading-icon{display:flex;align-items:center;justify-content:center;flex:0 0 56px;width:56px;height:56px;border:1px solid var(--line);border-radius:16px;background:var(--surface)}
+.hybrid .card-heading-icon svg{margin:0;color:var(--accent)}
+.hybrid .card-heading h2{margin:0;min-width:0;line-height:1.2}
+.hybrid .help-options article{display:flex;flex-direction:column;align-items:flex-start}
+.hybrid .help-options .card-heading{width:100%}
+.hybrid .help-options article>.button{margin-top:auto}
+.hybrid .coverage-panel>.card-heading{margin-bottom:24px}
+@media(max-width:600px){
+  .hybrid .card-heading{gap:16px}
+  .hybrid .card-heading-icon{flex-basis:44px;width:44px;height:44px;border-radius:12px}
+  .hybrid .card-heading-icon svg{width:26px;height:26px}
+  .hybrid .card-heading h2{font-size:22px;letter-spacing:-.5px}
+  .hybrid .coverage-panel>.card-heading{margin-bottom:20px}
+}
+
+/* Subtle card feedback for pointer and keyboard interaction. */
+.hybrid :is(.values-grid article,.help-options article,.plan,.connection-step-grid>li){transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+.hybrid :is(.value-icon,.card-heading-icon){transition:transform .22s ease,background-color .22s ease}
+@media(hover:hover) and (pointer:fine){
+  .hybrid :is(.values-grid article,.help-options article,.plan,.connection-step-grid>li):hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 12px 28px #0151fd12}
+  .hybrid :is(.values-grid article,.help-options article):hover :is(.value-icon,.card-heading-icon){transform:translateY(-2px) rotate(-3deg)}
+}
+.hybrid :is(.help-options article,.plan,.connection-step-grid>li):focus-within{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 12px 28px #0151fd12}
+@media(prefers-reduced-motion:reduce){
+  .hybrid :is(.values-grid article,.help-options article,.plan,.connection-step-grid>li,.value-icon,.card-heading-icon){transition:none!important;animation:none!important;transform:none!important}
+}
+
+/* One-time scroll entrances; translate stays independent of hover transforms. */
+@keyframes section-arrive{
+  from{opacity:0;translate:0 24px}
+  to{opacity:1;translate:0 0}
+}
+@media(prefers-reduced-motion:no-preference){
+  .hybrid .scroll-pending{opacity:0}
+  .hybrid .scroll-enter{animation:section-arrive .65s cubic-bezier(.2,.65,.3,1) var(--reveal-delay,0ms) both}
+}
+@media(prefers-reduced-motion:reduce){
+  .hybrid :is(.scroll-pending,.scroll-enter){opacity:1;translate:none;animation:none!important}
+}
+
+/* Mobile footer follows the desktop grouping in two stacked rows. */
+@media(max-width:600px){
+  .hybrid .footer{position:relative;isolation:isolate;margin-top:24px;padding-bottom:0}
+  .hybrid .footer::before{content:"";position:absolute;inset:0 calc(50% - 50vw);z-index:-1;background:var(--surface2);border-top:1px solid var(--line)}
+  .hybrid .footer-columns{grid-template-columns:1fr;gap:18px;border-top:0;padding-block:20px 16px}
+  .hybrid .footer-navigation{grid-column:1;grid-row:1;display:flex;flex-wrap:wrap;gap:0 20px}
+  .hybrid .footer-navigation h3{flex-basis:100%;margin-bottom:6px}
+  .hybrid .footer-contact{grid-column:1;grid-row:2;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+  .hybrid .footer-contact h3{grid-column:1/-1;margin-bottom:2px}
+  .hybrid .footer-contact>span{padding:4px 0;align-items:center}
+  .hybrid .footer-columns>div>a,.hybrid .footer-columns>div>span,.hybrid .footer-columns>div>button{font-size:12px;min-height:30px}
+  .hybrid .footer-contact>a,.hybrid .footer-contact>span{gap:6px}
+  .hybrid .footer-fiber .footer-bottom{padding-block:12px;gap:0}
+}
