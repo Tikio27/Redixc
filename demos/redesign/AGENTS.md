@@ -48,3 +48,5 @@ Navigation content matches the main container: centered, maximum 1280px wide wit
 Footer: omit the duplicate logo because branding stays visible in the sticky header. User rejected the tall stacked mobile footer and full-width WhatsApp button. Use a compact two-column layout: navigation on the left, contact and a simple WhatsApp link on the right; no separate Hablemos heading on mobile.
 
 Footer structure: exactly two blocks on desktop and mobile: Navegación with all page links on the left, Contáctanos with phone, email, location and WhatsApp on the right.
+
+Mobile footer density: user requests less height; use 28px link rows, 14px section padding, 6px heading gap and compact 10px legal copy. Preserve the two-column structure.
