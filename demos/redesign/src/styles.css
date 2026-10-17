@@ -31,7 +31,7 @@ body{background:#f4f7fc}:root[data-theme=dark] body{background:#070c17}.app{max-
 html,body,#root{margin:0;min-height:100%;background:var(--bg)}
 .app.hybrid{width:100%;max-width:none;margin:0;border-radius:0;overflow:clip;background:var(--bg)}
 .hybrid .header{background:var(--bg);border-radius:0}
-.hybrid .header-inner{height:var(--nav-height);max-width:1080px;gap:26px}
+.hybrid .header-inner{height:var(--nav-height);width:calc(100% - 80px);max-width:1280px;gap:26px}
 .hybrid .header .brand{width:140px}
 .hybrid .desktop-nav{margin-left:auto!important;gap:28px}
 .hybrid .header-actions{gap:18px}
@@ -170,7 +170,7 @@ html{scroll-padding-top:calc(var(--nav-height) + 16px)}
 /* Compact height with vertically centered navigation content. */
 .hybrid .header .brand{width:112px}
 @media(min-width:851px){
-  .hybrid .header-inner{max-width:1080px;justify-content:space-between;gap:26px}
+  .hybrid .header-inner{justify-content:space-between;gap:26px}
   .hybrid .desktop-nav{margin-left:auto!important;gap:24px}
   .hybrid .header-actions{margin-left:0;gap:14px}
 }
