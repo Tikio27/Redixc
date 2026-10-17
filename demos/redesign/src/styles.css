@@ -142,3 +142,11 @@ html,body,#root{margin:0;min-height:100%;background:var(--bg)}
 .connection-step-action>svg{flex-shrink:0}
 @media(max-width:850px) and (min-width:601px){.connection-step-grid{gap:15px}.connection-step-grid>li{padding:19px}.connection-step-grid h3{font-size:20px;min-height:72px}.connection-step-grid p{font-size:14px;min-height:118px}.connection-step-action{font-size:13px}}
 @media(max-width:600px){.connection-step-grid{gap:16px}.connection-step-grid>li{display:flex;padding:24px;text-align:left;gap:0}.connection-step-grid h3{font-size:23px;min-height:0;margin-top:19px}.connection-step-grid p{font-size:15px;min-height:0;margin:12px 0 22px}.connection-step-grid .connection-step-number{position:static;font-size:14px;width:auto;height:auto}.connection-step-action{font-size:15px}.connection-step-top{height:36px}}
+
+/* V7: persistent navigation across all pages and themes. */
+:root{--nav-height:110px}
+html{scroll-padding-top:calc(var(--nav-height) + 16px)}
+.app.hybrid .header{position:sticky;top:0;z-index:30;background:var(--bg);box-shadow:0 1px 0 var(--line)}
+.hybrid .mobile-nav{max-height:calc(100dvh - var(--nav-height));overflow-y:auto;overscroll-behavior:contain}
+@media(max-width:850px){:root{--nav-height:88px}}
+@media(max-width:600px){:root{--nav-height:82px}}

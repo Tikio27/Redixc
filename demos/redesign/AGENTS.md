@@ -34,3 +34,5 @@ User selected upload/image(4).png, exactly third displayed ideation image (exec-
 V6: User requests solid non-white hero background, clearly separated from header and benefits. Light #e8efff, dark #16243e, photo on right without white fade; centered stacked mobile retained.
 
 V6 steps: aligned equal-height cards, numbered top row with icon, short titles, concrete explanations and clear CTA for each step. Stack as full cards on mobile; no detached numbers or chevrons.
+
+V7: Header is sticky at top on every route, with opaque theme background, visible separation, anchor offset and independently scrollable mobile dropdown. Validate scroll on desktop and mobile before committing only to design/redixc-landing-demos.
