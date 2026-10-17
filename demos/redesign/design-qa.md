@@ -27,3 +27,9 @@ Build npm run build:demo PASS. Existing test:sites 4/4 PASS. No deployment. Only
 
 ## Limits / follow-up
 Chrome review with real-width iframes, not physical-device Safari testing. No additional backend or coverage database. Optional P3: tune fine text spacing after local device review.
+
+## V6 · Solid hero and clear steps (2026-10-16 America/Mexico_City)
+Latest visual feedback: upload/image(5).png and upload/image(6).png. Compared with browser-rendered results together in qa/v6-hero-comparison.png and qa/v6-steps-comparison.png; sources normalized to 680 px width, intentional layout and aspect-ratio changes. Evidence: /workspace/scratch/redixc-v6-hero-light.png, redixc-v6-hero-dark.png, redixc-v6-steps-final.png, redixc-v6-responsive.png.
+Fixed P2: ambiguous white hero replaced with solid #e8efff light / #16243e dark; un-faded photograph occupies right half and stacks below on mobile. Fixed P2: detached number/icon and unclear step order replaced with self-contained cards, concise instructions and functional actions. Typography and colors remain consistent; existing raster family asset reused.
+Chrome 390/768/1366 px (content 375/753/1351) has no horizontal overflow. At 768 px all three cards are 374 px tall with matching title and action positions; at 1366 px all three are 328 px tall with matching positions. Mobile stacks natural-height cards. Light/dark visual checks passed. Coverage action reaches correct page; final step opens and closes message preview, no message sent. Console: only extension metadata logs, no app error observed. Source screenshots are defect references, not pixel-match targets.
+V6 final result: passed. Build and existing packaging tests pass. Physical Safari/device review remains outside this check.
