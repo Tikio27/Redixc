@@ -36,3 +36,11 @@ V6: User requests solid non-white hero background, clearly separated from header
 V6 steps: aligned equal-height cards, numbered top row with icon, short titles, concrete explanations and clear CTA for each step. Stack as full cards on mobile; no detached numbers or chevrons.
 
 V7: Header is sticky at top on every route, with opaque theme background, visible separation, anchor offset and independently scrollable mobile dropdown. Validate scroll on desktop and mobile before committing only to design/redixc-landing-demos.
+
+Homepage hero: use 70% width for text and 30% for the photo above the mobile breakpoint. Allow the copy container to use that space without the old width cap; retain centered, stacked text and photo on mobile.
+
+Navigation: keep a compact header (80px desktop, 72px tablet, 64px mobile) with a 140px desktop logo. Keep sticky anchor offsets synchronized with the header height.
+
+Header logo: use the slogan-free logo-mark SVG variants in both themes. Display “La fibra que te une al mundo.” in the homepage hero instead of the previous fiber/local-service description.
+
+Navigation content uses a centered 1080px maximum width. Homepage headline wraps naturally, with the blue phrase on its own line; allow hero height to grow with its content to prevent clipping.

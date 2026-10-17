@@ -31,8 +31,8 @@ body{background:#f4f7fc}:root[data-theme=dark] body{background:#070c17}.app{max-
 html,body,#root{margin:0;min-height:100%;background:var(--bg)}
 .app.hybrid{width:100%;max-width:none;margin:0;border-radius:0;overflow:clip;background:var(--bg)}
 .hybrid .header{background:var(--bg);border-radius:0}
-.hybrid .header-inner{height:110px;max-width:1328px;gap:26px}
-.hybrid .header .brand{width:220px}
+.hybrid .header-inner{height:var(--nav-height);max-width:1080px;gap:26px}
+.hybrid .header .brand{width:140px}
 .hybrid .desktop-nav{margin-left:auto!important;gap:28px}
 .hybrid .header-actions{gap:18px}
 .hybrid .theme-control{padding:3px;gap:1px;border-radius:22px;flex-shrink:0}
@@ -46,9 +46,9 @@ html,body,#root{margin:0;min-height:100%;background:var(--bg)}
 .hybrid .page-intro h1{font-size:clamp(40px,4.5vw,66px);line-height:1.07;letter-spacing:-2px;margin-top:20px}
 .hybrid .page-intro p{max-width:540px;font-size:18px;line-height:1.6;margin-top:24px;color:var(--muted)}
 .page-intro-image{width:100%;height:380px;object-fit:cover;border-radius:18px}
-@media(max-width:1000px){.hybrid .header-inner{gap:18px}.hybrid .header .brand{width:170px}.hybrid .desktop-nav{gap:16px}.hybrid .header-actions{gap:12px}.hybrid .page-intro{gap:30px}.page-intro-image{height:340px}}
-@media(max-width:850px){.hybrid .desktop-nav{display:none}.hybrid .header-actions{margin-left:auto}.hybrid .menu-toggle{display:grid}.hybrid .header-inner{height:88px}.hybrid .page-intro{grid-template-columns:1fr;gap:30px;padding-block:30px 40px}.hybrid .page-intro h1{font-size:48px}.page-intro-image{height:320px}}
-@media(max-width:600px){.hybrid .header-inner{width:calc(100% - 32px);gap:10px;height:82px}.hybrid .header .brand{width:128px}.hybrid .header-actions{gap:5px}.hybrid .whatsapp-nav{display:flex;padding:5px}.hybrid .whatsapp-nav span{display:none}.hybrid .theme-control button{padding:7px}.hybrid.page-inicio .hero-after{margin-top:24px;width:calc(100% - 32px)}.hybrid.page-inicio .home-plans{width:calc(100% - 36px);padding-top:40px}.hybrid .page-intro{width:calc(100% - 36px)}.hybrid .page-intro h1{font-size:42px}.hybrid .page-intro p{font-size:16px}.page-intro-image{height:260px}}
+@media(max-width:1000px){.hybrid .header-inner{gap:18px}.hybrid .header .brand{width:140px}.hybrid .desktop-nav{gap:16px}.hybrid .header-actions{gap:12px}.hybrid .page-intro{gap:30px}.page-intro-image{height:340px}}
+@media(max-width:850px){.hybrid .desktop-nav{display:none}.hybrid .header-actions{margin-left:auto}.hybrid .menu-toggle{display:grid}.hybrid .header-inner{height:var(--nav-height)}.hybrid .page-intro{grid-template-columns:1fr;gap:30px;padding-block:30px 40px}.hybrid .page-intro h1{font-size:48px}.page-intro-image{height:320px}}
+@media(max-width:600px){.hybrid .header-inner{width:calc(100% - 32px);gap:10px;height:var(--nav-height)}.hybrid .header .brand{width:128px}.hybrid .header-actions{gap:5px}.hybrid .whatsapp-nav{display:flex;padding:5px}.hybrid .whatsapp-nav span{display:none}.hybrid .theme-control button{padding:7px}.hybrid.page-inicio .hero-after{margin-top:24px;width:calc(100% - 32px)}.hybrid.page-inicio .home-plans{width:calc(100% - 36px);padding-top:40px}.hybrid .page-intro{width:calc(100% - 36px)}.hybrid .page-intro h1{font-size:42px}.hybrid .page-intro p{font-size:16px}.page-intro-image{height:260px}}
 
 @media(max-width:600px){.hybrid.page-inicio .hero-copy,.hybrid .page-intro-copy{text-align:center}.hybrid.page-inicio .hero-buttons{justify-content:center}.hybrid.page-inicio .hero-copy>p,.hybrid .page-intro p{margin-inline:auto}.hybrid .page-intro h1{margin-inline:auto}.hybrid .page-intro .eyebrow{text-align:center}}
 
@@ -130,6 +130,11 @@ html,body,#root{margin:0;min-height:100%;background:var(--bg)}
 @media(max-width:600px){.homepage-v5.page-inicio .family-visual{position:relative;inset:auto;width:100%;height:270px}.homepage-v5.hybrid.page-inicio .hero-copy{background:inherit}.homepage-v5.hybrid.page-inicio .hero-buttons .secondary{background:transparent}}
 
 /* V6: self-contained, aligned steps with a clear next action. */
+@media(min-width:601px){
+  .homepage-v5.hybrid.page-inicio .hero-copy{width:70%;max-width:none;padding-right:32px}
+  .homepage-v5.page-inicio .family-visual{left:70%;width:30%}
+}
+
 .connection-step-grid{gap:24px;align-items:stretch}
 .connection-step-grid>li{display:flex;flex-direction:column;align-items:stretch;text-align:left;border:1px solid var(--line);border-radius:18px;background:var(--surface2);padding:26px;min-width:0}
 .connection-step-top{display:flex;align-items:center;justify-content:space-between;gap:16px;height:40px}
@@ -144,9 +149,20 @@ html,body,#root{margin:0;min-height:100%;background:var(--bg)}
 @media(max-width:600px){.connection-step-grid{gap:16px}.connection-step-grid>li{display:flex;padding:24px;text-align:left;gap:0}.connection-step-grid h3{font-size:23px;min-height:0;margin-top:19px}.connection-step-grid p{font-size:15px;min-height:0;margin:12px 0 22px}.connection-step-grid .connection-step-number{position:static;font-size:14px;width:auto;height:auto}.connection-step-action{font-size:15px}.connection-step-top{height:36px}}
 
 /* V7: persistent navigation across all pages and themes. */
-:root{--nav-height:110px}
+:root{--nav-height:80px}
 html{scroll-padding-top:calc(var(--nav-height) + 16px)}
 .app.hybrid .header{position:sticky;top:0;z-index:30;background:var(--bg);box-shadow:0 1px 0 var(--line)}
 .hybrid .mobile-nav{max-height:calc(100dvh - var(--nav-height));overflow-y:auto;overscroll-behavior:contain}
-@media(max-width:850px){:root{--nav-height:88px}}
-@media(max-width:600px){:root{--nav-height:82px}}
+@media(max-width:850px){:root{--nav-height:72px}}
+@media(max-width:600px){:root{--nav-height:64px}}
+
+/* Compact centered navigation and fluid homepage heading. */
+.hybrid .header-inner{margin-inline:auto}
+.homepage-v5.hybrid.page-inicio .hero h1{max-width:900px;text-wrap:pretty;overflow-wrap:break-word}
+.homepage-v5.hybrid.page-inicio .hero-family h1 em{display:block}
+@media(min-width:601px){
+  .homepage-v5.hybrid.page-inicio .hero{height:auto;min-height:620px}
+  .homepage-v5.hybrid.page-inicio .hero-copy{padding-block:56px;min-width:0}
+  .homepage-v5.hybrid.page-inicio .hero h1{font-size:clamp(44px,5vw,80px);line-height:1.1;letter-spacing:-2px}
+}
+@media(min-width:1800px){.homepage-v5.hybrid.page-inicio .hero{min-height:680px}}
