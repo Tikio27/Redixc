@@ -46,3 +46,5 @@ Header logo: use the slogan-free logo-mark SVG variants in both themes. Display 
 Navigation content matches the main container: centered, maximum 1280px wide with 40px side gutters on desktop. Align the logo at its left edge and theme controls at its right edge; retain the distributed layout. User feedback concerns height and vertical centering, not a narrower horizontal group. Trim blank space in the header SVG viewBox to center the visible logo vertically. Homepage headline wraps naturally, with the blue phrase on its own line; allow hero height to grow with its content to prevent clipping.
 
 Footer: omit the duplicate logo because branding stays visible in the sticky header. User rejected the tall stacked mobile footer and full-width WhatsApp button. Use a compact two-column layout: navigation on the left, contact and a simple WhatsApp link on the right; no separate Hablemos heading on mobile.
+
+Footer structure: exactly two blocks on desktop and mobile: Navegación with all page links on the left, Contáctanos with phone, email, location and WhatsApp on the right.
