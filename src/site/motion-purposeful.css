@@ -1,0 +1,79 @@
+/* Movimiento propuesto («con propósito»). Todo vive bajo .motion-purposeful;
+   sin esa clase el sitio conserva sus animaciones actuales. */
+
+/* Elevación solo en lo que se puede pulsar: las tarjetas no son botones. */
+.app.motion-purposeful
+  :is(.values-grid article, .help-options article, .plan, .connection-step-grid > li):hover {
+  transform: none;
+  box-shadow: none;
+}
+.app.motion-purposeful
+  :is(.values-grid article, .help-options article):hover
+  :is(.value-icon, .card-heading-icon) {
+  transform: none;
+}
+
+/* Fotos y grupos de tarjetas acompañan el scroll; títulos y texto nunca se ocultan.
+   Sin soporte para animation-timeline, no hay animación y todo queda visible. */
+@keyframes purposeful-enter {
+  from {
+    opacity: 0.4;
+    translate: 0 8px;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .app.motion-purposeful
+      main
+      :is(
+        .plans-grid,
+        .connection-step-grid,
+        .values-grid,
+        .help-options,
+        .clarity-photo,
+        .plan-table-block
+      ) {
+      animation: purposeful-enter linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* Llegada al plan recomendado: el contorno aparece y la etiqueta se funde. */
+@keyframes recommend-ring {
+  from {
+    box-shadow: 0 0 0 0 var(--accent);
+  }
+}
+@keyframes recommend-label {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .app.motion-purposeful .plan.recommended {
+    animation: recommend-ring 200ms ease-out;
+  }
+  .app.motion-purposeful .plan.recommended .recommend-label {
+    animation: recommend-label 200ms ease-out;
+  }
+}
+
+/* Vista previa del mensaje: la frase que cambió se resalta y se desvanece. */
+@keyframes message-change {
+  from {
+    background-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  }
+}
+.app.motion-purposeful .message-preview mark.message-change {
+  color: inherit;
+  background: transparent;
+  border-radius: 4px;
+  animation: message-change 600ms ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .app.motion-purposeful .message-preview mark.message-change {
+    animation-duration: 150ms;
+  }
+}

@@ -1,36 +1,11 @@
-import { Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
-//importing react slick slider
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { App as RedixcSite } from "./site/App.jsx";
 
-import { animateScroll } from "react-scroll";
-import NavBar from "./components/organs/NavBar"
-import Home from "./components/pages/Home";
-import Footer from "./components/organs/Footer";
-import AboutUs from "./components/pages/AboutUs";
-import LegalPage from "./components/pages/Legal";
-
-function App() {
-
-  const directory = useLocation();
-  useEffect(() => {
-    animateScroll.scrollToTop({
-      duration: 0,
-    });
-  }, [directory.pathname]);
-
+export default function App() {
   return (
-    <div className="w-full h-full bg-zinc-900 font-nunito relative">
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/legal" element={<LegalPage />} />
-      </Routes>
-      <Footer />
-    </div>
-  )
+    <Routes>
+      <Route path="/about" element={<Navigate to="/nosotros" replace />} />
+      <Route path="*" element={<RedixcSite motion="expressive" />} />
+    </Routes>
+  );
 }
-
-export default App
