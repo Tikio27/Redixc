@@ -231,3 +231,7 @@ El usuario pidió ver animaciones nuevas y más visibles (las 8 propuestas). `mo
 **Interfaces:** `<App motion="current|purposeful|expressive">`; `useFluidControls(enabled, route, extraSelector?)`; `startTransition(enabled, update): ViewTransition | null`; `useHeroMoment(enabled, route)`; `useDisclosureMotion(enabled, route)`; `useMenuCascade(enabled, open)`.
 
 **Verificación (grupo `expresivo`):** pseudo-animaciones `contact-morph`, `reco-morph` y `root` presentes al abrir/cerrar, recomendar y cambiar tema; cierre ≤ 450 ms con foco devuelto; hero animado en la primera carga y no al volver a Inicio en la misma sesión; plegable abre/cierra y termina cerrado si se pulsa dos veces seguidas; ≥ 6 animaciones en el menú móvil; `--fluid-scale` < 1 al presionar una localidad; las comprobaciones de «sobrio» (primera pantalla y salto) también en expresivo; con movimiento reducido no hay View Transitions ni `transform`.
+
+---
+
+**Cierre (19/10/2026):** el usuario aprobó la propuesta con movimiento expresivo como diseño final. Se retiraron los comparadores; las comprobaciones viven ahora en `tests/e2e/` contra el sitio principal y el código ya no tiene variantes de movimiento.

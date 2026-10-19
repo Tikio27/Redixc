@@ -5,7 +5,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/about" element={<Navigate to="/nosotros" replace />} />
-      <Route path="*" element={<RedixcSite motion="expressive" />} />
+      <Route path="*" element={<RedixcSite />} />
     </Routes>
   );
 }

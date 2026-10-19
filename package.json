@@ -9,7 +9,9 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "dev:demo": "npm --prefix demos/redesign run dev",
-    "build:demo": "npm --prefix demos/redesign run build"
+    "build:demo": "npm --prefix demos/redesign run build",
+    "test": "node --test src/site/plans.test.mjs",
+    "test:e2e": "node tests/e2e/verify.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

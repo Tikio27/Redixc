@@ -1,4 +1,4 @@
-/* Movimiento expresivo: se suma a .motion-purposeful (el «sobrio»). */
+/* Transiciones del sitio; se suman a las bases de motion-purposeful.css. */
 
 /* 1–2 · Origen → diálogo y resultado → plan (View Transitions). */
 ::view-transition-group(contact-morph),
@@ -51,7 +51,7 @@
   rotate: 45deg;
 }
 
-/* 6 · Entradas al scroll por tarjeta y foto, más visibles que en «sobrio». */
+/* 6 · Entradas al scroll por tarjeta y foto; nunca dejan contenido oculto. */
 @keyframes expressive-enter {
   from {
     opacity: 0.3;

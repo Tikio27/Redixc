@@ -31,13 +31,13 @@ La integración se trabaja en `feat/redixc-production-redesign`. No implica publ
 
 ## Integración de la variante aprobada
 
-Se aplicó al sitio principal la variante Emil revisada en `demos/apple-comparison`: hero estable con entrada breve, transiciones al filtrar planes, barra de comparación, menú móvil reversible, resultado del recomendador expandible y diálogo de WhatsApp con arrastre móvil. Se mantienen movimiento reducido, foco, navegación por teclado y cierre con Escape.
+Se aplicó al sitio principal la variante de interacción fluida: menú móvil reversible, resultado del recomendador expandible y diálogo de WhatsApp con arrastre móvil. (Los filtros, la barra de comparación y la entrada del hero de esa variante se sustituyeron después; ver «Diseño final».) Se mantienen movimiento reducido, foco, navegación por teclado y cierre con Escape.
 
 La cabecera conserva los tres iconos horizontales de apariencia, con selección circular y alineación óptica del logo. Las consultas de cobertura usan exclusivamente El Botadero, Pueblo Nuevo, Villa Juárez y El Carrizo, sin campos de escritura ni opción de otra localidad. La disponibilidad se confirma por domicilio; no se valida automáticamente.
 
 Los ajustes visuales están en `src/site/refinements.css` y `src/site/motion.css`; las animaciones se implementan en `fluidMotion.js`, `PlanMotion.jsx` y `MotionPanel.jsx`, sin dependencias nuevas. La narrativa del hero fue retirada. Se conserva el tema del sitio con la clave `redixc-theme`.
 
-El comparador conserva una copia de la versión anterior en `demos/apple-comparison/src/CurrentSnapshot.jsx`, para que la referencia no cambie al integrar la propuesta. No se modificó `demos/redesign`. Esta integración local no implica commit ni publicación.
+No se modificó `demos/redesign`.
 
 ## Nosotros y servicio a la comunidad
 
@@ -45,12 +45,19 @@ La página `/nosotros` incluye la experiencia de más de diez años y la continu
 
 Se incorporaron cinco fotografías reales de los enlaces públicos facilitados, con fuentes visibles. La procedencia y los límites de cada afirmación se documentan en `src/site/community-sources.md`; el enlace del grupo no estaba disponible. No se inventaron fechas de fundación, cifras de beneficiarios ni instituciones concretas.
 
-## Claridad para elegir y contactar (propuesta en revisión)
+## Diseño final (aprobado el 19/10/2026)
 
-Rama `feat/redixc-clarity-updates`, sin commits hasta el visto bueno del usuario. Se compara con la versión anterior en `demos/clarity-comparison` (http://127.0.0.1:5176/); la copia congelada está en `demos/clarity-comparison/actual/`. Plan: `docs/superpowers/plans/2026-10-19-redixc-claridad.md`.
+Es la versión definitiva del rediseño, lista para publicarse más adelante. Las comparativas locales (`demos/apple-comparison`, `demos/clarity-comparison`) se retiraron; `demos/redesign` sigue como referencia original. Plan y decisiones: `docs/superpowers/plans/2026-10-19-redixc-claridad.md`.
 
-Cambios: datos publicados en redixc.net (inscripción IFT por plan, visor de tarifas, dirección), recomendador que lleva al plan, Planes con las tarjetas primero y tabla de 6 planes en lugar del comparador, Cobertura con un botón por localidad, cabecera móvil con WhatsApp rotulado, texto ≥ 12 px, cierre del diálogo en ≤ 350 ms y nueva foto de Planes (`hero-planes-eleccion.webp`, generada; no son clientes). Los datos de planes están en `src/site/plans.js` con pruebas en `src/site/plans.test.mjs`.
+- Datos publicados en redixc.net: número de inscripción IFT por plan, visor de tarifas de la Comisión Reguladora de Telecomunicaciones y dirección de El Botadero.
+- Planes: tarjetas primero, recomendador plegable y tabla de los 6 planes. Desde Inicio, el recomendador lleva a la tarjeta sugerida.
+- Cobertura: un botón por localidad. Sin desplegables: la localidad se elige con fichas y las personas con un control segmentado.
+- Cabecera móvil con WhatsApp rotulado y el tema dentro del menú; texto mínimo de 12 px; footer móvil a 13 px.
+- Foto de Planes `hero-planes-eleccion.webp` (generada; no son clientes).
+- Movimiento: bases en `motion-purposeful.css` (nada queda oculto, sin elevación en tarjetas estáticas) y transiciones en `expressiveMotion.js` y `motion-expressive.css`: tarjeta → diálogo, recomendador → plan, un momento del hero por sesión, fundido de tema, plegables animados, entradas al scroll y menú en cascada. Con movimiento reducido no hay desplazamientos; sin View Transitions, el diálogo crece desde su botón.
 
-Hay dos propuestas de movimiento opcionales: «sobrio» (`motion="purposeful"`, `src/site/motion-purposeful.css`) y «expresivo» (`motion="expressive"`, `src/site/expressiveMotion.js` y `src/site/motion-expressive.css`), con transiciones de la tarjeta al diálogo y del recomendador al plan, momento del hero una vez por sesión, fundido de tema y plegables animados. Producción usa el movimiento expresivo, elegido por el usuario. La localidad de la consulta y las personas del recomendador se eligen con fichas y un control segmentado en lugar de desplegables. Pendiente de validar: cobertura de la cabecera municipal, fórmula del recomendador, costo de instalación y horarios.
+Datos de planes en `src/site/plans.js`. Pruebas: `npm test` (unitarias) y, con `npm run dev` en marcha, `npm run test:e2e` (Playwright con el `playwright-core` ya instalado en otro proyecto local; variable `PLAYWRIGHT_CORE` para cambiarlo).
+
+Pendiente de validar con el negocio: cobertura en la cabecera municipal, fórmula del recomendador, costo de instalación y horarios.
 
 Eslogan oficial confirmado por el usuario el 19/10/2026: «La fibra que te une al mundo.» (redixc.net aún muestra «te conecta al mundo»).

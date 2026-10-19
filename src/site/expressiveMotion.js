@@ -1,4 +1,4 @@
-// Movimiento expresivo (comparador): transiciones con continuidad espacial,
+// Movimiento del sitio: transiciones con continuidad espacial,
 // un momento orquestado en el hero y plegables reversibles. Todo respeta
 // prefers-reduced-motion y degrada a un cambio inmediato sin View Transitions.
 import { useEffect, useLayoutEffect } from "react";

@@ -9,9 +9,7 @@ import {
   useId,
 } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useHeroEntrance } from "./PlanMotion";
 import { useFluidControls, useFluidSheet } from "./fluidMotion";
-import { useScrollReveal } from "./useScrollReveal";
 import {
   canTransition,
   startTransition,
@@ -113,18 +111,16 @@ function getRoute(pathname) {
   return { page: page || "notFound" };
 }
 
-// motion: "current" keeps today's animations; "purposeful" is the proposal
-// compared in demos/clarity-comparison (see motion-purposeful.css).
-function App({ fluid = true, motion = "current", initialTheme = null }) {
-  // "expressive" builds on "purposeful" (nothing hidden, no hover lift on
-  // static cards) and adds the transitions in expressiveMotion.js.
-  const expressive = motion === "expressive";
-  const purposeful = motion === "purposeful" || expressive;
+// Motion: purposeful foundations (motion-purposeful.css: nothing hidden, no
+// hover lift on static cards) plus the expressive transitions in
+// expressiveMotion.js and motion-expressive.css.
+function App() {
+  const fluid = true;
   const location = useLocation();
   const navigate = useNavigate();
   const route = useMemo(() => getRoute(location.pathname), [location.pathname]);
   const [theme, setTheme] = useState(
-    () => initialTheme || localStorage.getItem("redixc-theme") || "system",
+    () => localStorage.getItem("redixc-theme") || "system",
   );
   const [systemDark, setSystemDark] = useState(
     matchMedia("(prefers-color-scheme: dark)").matches,
@@ -195,21 +191,17 @@ function App({ fluid = true, motion = "current", initialTheme = null }) {
       .querySelector('meta[property="og:url"]')
       ?.setAttribute("content", url);
   }, [route, location.pathname]);
-  useScrollReveal(route, !purposeful);
   useFluidControls(
     fluid,
     route,
-    expressive
-      ? ".motion-expressive :is(.locality-list button,.plan-table button)"
-      : "",
+    ".motion-expressive :is(.locality-list button,.plan-table button)",
   );
-  useHeroEntrance(fluid && !purposeful, route);
-  useHeroMoment(expressive, route);
-  useDisclosureMotion(expressive, route);
-  useMenuCascade(expressive, menu);
+  useHeroMoment(true, route);
+  useDisclosureMotion(true, route);
+  useMenuCascade(true, menu);
   const changeTheme = (next) =>
     startTransition(
-      expressive,
+      true,
       () => setTheme(next),
       () => {
         document.documentElement.dataset.theme =
@@ -242,10 +234,9 @@ function App({ fluid = true, motion = "current", initialTheme = null }) {
       kind,
       origin: source?.getBoundingClientRect() || null,
     };
-    // Expressive, desktop: the card (or button) that opened it becomes the dialog.
+    // Desktop: the card (or button) that opened it becomes the dialog.
     const morphFrom = source?.closest(".plan") || source;
     if (
-      expressive &&
       morphFrom &&
       canTransition() &&
       matchMedia("(min-width: 601px)").matches
@@ -398,7 +389,7 @@ function App({ fluid = true, motion = "current", initialTheme = null }) {
   );
   return (
     <div
-      className={`app family fiber hybrid header-compact ${fluid ? "emil" : ""} ${purposeful ? "motion-purposeful" : ""} ${expressive ? "motion-expressive" : ""} ${route.page === "inicio" ? "homepage-v5" : ""} page-${route.page}`}
+      className={`app family fiber hybrid header-compact emil motion-purposeful motion-expressive ${route.page === "inicio" ? "homepage-v5" : ""} page-${route.page}`}
     >
       <a
         href="#contenido"
@@ -513,8 +504,8 @@ function App({ fluid = true, motion = "current", initialTheme = null }) {
                     setRecommended(p.name);
                     navigate(href("planes"), { state: { focusPlan: p.name } });
                   };
-                  if (!expressive || !resultCard || !canTransition()) return go();
-                  // Expressive: the result card travels to the plan card on /planes.
+                  if (!resultCard || !canTransition()) return go();
+                  // The result card travels to the plan card on /planes.
                   resultCard.style.viewTransitionName = "reco-morph";
                   let card;
                   startTransition(true, go, () => {
@@ -1016,7 +1007,6 @@ function App({ fluid = true, motion = "current", initialTheme = null }) {
       {contact && (
         <ContactModal
           fluid={fluid}
-          purposeful={purposeful}
           data={contact}
           close={() => setContact(null)}
         />
@@ -1331,7 +1321,6 @@ function ContactModal({
   data,
   close: onClose,
   fluid = false,
-  purposeful = false,
 }) {
   const [locality, setLocality] = useState(
     locales.includes(data.locality) ? data.locality : "",
@@ -1342,12 +1331,11 @@ function ContactModal({
   const [copyError, setCopyError] = useState(false);
   const ref = useRef(null);
   const firstRef = useRef(null);
-  // Proposal: on desktop the dialog grows from the button that opened it and
-  // returns there on close. Mobile keeps the bottom sheet.
+  // Without View Transitions, on desktop the dialog grows from the button that
+  // opened it and returns there on close. Mobile keeps the bottom sheet.
   const morphFrom = data.morphFrom;
   const [anchored] = useState(
     () =>
-      purposeful &&
       !morphFrom &&
       !!data.origin &&
       matchMedia("(min-width: 601px)").matches &&
@@ -1382,7 +1370,7 @@ function ContactModal({
       )
       .finished.then(onClose, onClose);
   };
-  // Expressive: reverse the morph back into the card or button it came from.
+  // Reverse the morph back into the card or button it came from.
   const closeMorph = () => {
     if (closing.current) return;
     closing.current = true;
@@ -1547,17 +1535,15 @@ function ContactModal({
         <div className="message-preview">
           <span>ASÍ EMPEZARÁ TU CONVERSACIÓN</span>
           <p>
-            {purposeful
-              ? parts.map((p, i) =>
-                  typeof p === "string" ? (
-                    p
-                  ) : (
-                    <mark className="message-change" key={p.key}>
-                      {p.text}
-                    </mark>
-                  ),
-                )
-              : message}
+            {parts.map((p) =>
+              typeof p === "string" ? (
+                p
+              ) : (
+                <mark className="message-change" key={p.key}>
+                  {p.text}
+                </mark>
+              ),
+            )}
           </p>
         </div>
         <p className="fineprint">

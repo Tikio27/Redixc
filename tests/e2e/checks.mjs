@@ -1,5 +1,5 @@
 // Task groups for verify.mjs. Each group checks the proposal unless noted.
-const P = (path, extra = "") => `/propuesta${path}?tema=light${extra}`;
+const P = (path) => `${path}?tema=light`;
 const ADDRESS =
   "Rafael Mejía Amaral #55, El Botadero, Santiago Ixcuintla, Nayarit, C.P. 63575";
 const VISOR = "https://tarifas.ift.org.mx/ift_visor/";
@@ -136,9 +136,8 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
       await context.close();
       assert(ok, "focus did not move to the Plus card");
     });
-    for (const motion of ["actual", "propuesto"])
-    await check(`planes: sin scroll horizontal a 320 px (movimiento ${motion})`, async () => {
-      const { page, context } = await open(browser, P("/planes", `&movimiento=${motion}`), { width: 320, height: 700, isMobile: true, hasTouch: true });
+    await check("planes: sin scroll horizontal a 320 px", async () => {
+      const { page, context } = await open(browser, P("/planes"), { width: 320, height: 700, isMobile: true, hasTouch: true });
       const s = await page.evaluate(() => {
         const region = document.querySelector(".plan-table")?.closest(".table-scroll");
         return {
@@ -227,7 +226,7 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
           await check(`tipografia ${route} @${label} ${theme}`, async () => {
             const { page, context } = await open(
               browser,
-              `/propuesta${route}?tema=${theme}`,
+              `${route}?tema=${theme}`,
               viewport,
               { reducedMotion: "reduce" },
             );
@@ -312,7 +311,7 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
     await check("detalles: título SEO completo en Inicio y sin aviso de fetchPriority", async () => {
       const { page, context, errors } = await open(browser, P("/"));
       const title = await page.title();
-      await page.goto(page.url().replace("/propuesta/?", "/propuesta/planes?"), { waitUntil: "networkidle" });
+      await page.goto(page.url().replace("/?", "/planes?"), { waitUntil: "networkidle" });
       const planesTitle = await page.title();
       await context.close();
       assert(
@@ -334,28 +333,22 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
       await context.close();
       return r;
     };
-    await check("imagen: Planes usa la foto nueva; actual conserva la suya", async () => {
+    await check("imagen: Planes usa su foto propia", async () => {
       const prop = await heroOf(P("/planes"));
-      const act = await heroOf("/actual/planes?tema=light");
-      assert(prop.src === "/assets/hero-planes-eleccion.webp", `propuesta: ${prop.src}`);
+      assert(prop.src === "/assets/hero-planes-eleccion.webp", `planes: ${prop.src}`);
       assert(prop.w === 1200, `naturalWidth ${prop.w}`);
       assert(/señora|hijo/i.test(prop.alt), `alt: ${prop.alt}`);
-      assert(act.src === "/assets/hero-planes.webp", `actual: ${act.src}`);
     });
-    await check("imagen: ningún hero de la propuesta repite archivo", async () => {
+    await check("imagen: ningún hero repite archivo", async () => {
       const srcs = [];
       for (const route of ROUTES) srcs.push((await heroOf(P(route))).src);
       assert(new Set(srcs).size === srcs.length, `repeated: ${srcs}`);
     });
   });
 
-  group("produccion", async (browser) => {
-    // The real app entry (src/main.tsx → src/App.tsx), served by the root dev server.
-    const PROD = process.env.PROD_URL || "http://127.0.0.1:5173";
-    await check("produccion: el sitio principal usa el movimiento expresivo", async () => {
-      const context = await browser.newContext({ viewport: DESKTOP });
-      const page = await context.newPage();
-      await page.goto(`${PROD}/planes`, { waitUntil: "networkidle" });
+  group("final", async (browser) => {
+    await check("final: el sitio usa el movimiento expresivo", async () => {
+      const { page, context } = await open(browser, P("/planes"));
       const classes = await page.locator(".app").getAttribute("class");
       await context.close();
       assert(/motion-expressive/.test(classes), `classes: ${classes}`);
@@ -424,7 +417,7 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
   });
 
   group("expresivo", async (browser) => {
-    const E = (path) => P(path, "&movimiento=expresivo");
+    const E = P;
     const pseudo = (name) => () =>
       document.getAnimations().filter((a) => a.effect?.pseudoElement?.includes(name)).length;
     // Under load a view transition may start later than a fixed sample; poll.
@@ -642,45 +635,11 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
     });
   });
 
+  // Foundations shared by the final motion, plus the anchored-dialog fallback
+  // used where View Transitions are unavailable (simulated by removing the API).
   group("movimiento", async (browser) => {
-    const M = (path) => P(path, "&movimiento=propuesto");
-    const firstViewport = () =>
-      [...document.querySelectorAll("main *")]
-        .filter((e) => {
-          const r = e.getBoundingClientRect();
-          return r.width && r.height && r.top >= 0 && r.bottom <= innerHeight;
-        })
-        .filter((e) => !e.matches(":is(.choice, .segmented-choice > label) > input") && parseFloat(getComputedStyle(e).opacity) < 1)
-        .map((e) => e.className || e.tagName).slice(0, 3);
-    for (const [label, viewport] of [["1440", DESKTOP], ["390", MOBILE]]) {
-      await check(`movimiento: primera pantalla visible y hero estático @${label}`, async () => {
-        const { page, context } = await open(browser, M("/"), viewport);
-        const s = await page.evaluate((fv) => ({
-          hidden: new Function(`return (${fv})()`)(),
-          pending: document.querySelectorAll(".scroll-pending").length,
-          heroAnims: document.getAnimations().filter((a) =>
-            a.effect?.target?.closest?.(".hero")).length,
-        }), firstViewport.toString());
-        await context.close();
-        assert(!s.hidden.length, `translucent in first viewport: ${s.hidden}`);
-        assert(s.pending === 0, `${s.pending} .scroll-pending elements`);
-        assert(s.heroAnims === 0, `${s.heroAnims} hero animations`);
-      });
-      await check(`movimiento: salto directo deja el contenido visible @${label}`, async () => {
-        const { page, context } = await open(browser, M("/"), viewport);
-        const opacity = await page.evaluate(async () => {
-          const el = [...document.querySelectorAll(".connection-step-grid > li")].at(-1);
-          el.scrollIntoView({ block: "center", behavior: "instant" });
-          await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-          return Math.min(
-            parseFloat(getComputedStyle(el).opacity),
-            parseFloat(getComputedStyle(el.parentElement).opacity),
-          );
-        });
-        await context.close();
-        assert(opacity >= 0.99, `opacity ${opacity}`);
-      });
-    }
+    const M = P;
+    const noVT = { noViewTransitions: true };
     await check("movimiento: sin soporte de la técnica, todo opaco", async () => {
       const { page, context } = await open(browser, M("/"));
       const low = await page.evaluate(async () => {
@@ -707,8 +666,8 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
       await context.close();
       assert(JSON.stringify(before) === JSON.stringify(after), `hover changed ${after}`);
     });
-    await check("movimiento: el diálogo nace del botón que lo abrió (escritorio)", async () => {
-      const { page, context } = await open(browser, M("/planes"));
+    await check("movimiento: sin View Transitions, el diálogo nace del botón (escritorio)", async () => {
+      const { page, context } = await open(browser, M("/planes"), DESKTOP, noVT);
       const button = page.locator(".all-plans .plan-button").nth(2);
       await button.scrollIntoViewIfNeeded();
       const b = await button.boundingBox();
@@ -724,8 +683,8 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
       assert(o.x >= b.x && o.x <= b.x + b.width && o.y >= b.y && o.y <= b.y + b.height,
         `origin ${JSON.stringify(o)} outside button ${JSON.stringify(b)}`);
     });
-    await check("movimiento: clic sin foco (Safari) también nace del botón", async () => {
-      const { page, context } = await open(browser, M("/planes"));
+    await check("movimiento: sin View Transitions, clic sin foco (Safari) también nace del botón", async () => {
+      const { page, context } = await open(browser, M("/planes"), DESKTOP, noVT);
       const s = await page.evaluate(async () => {
         const btn = document.querySelectorAll(".all-plans .plan-button")[2];
         btn.scrollIntoView({ block: "center", behavior: "instant" });

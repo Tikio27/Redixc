@@ -1,5 +1,5 @@
-/* Movimiento propuesto («con propósito»). Todo vive bajo .motion-purposeful;
-   sin esa clase el sitio conserva sus animaciones actuales. */
+/* Bases del movimiento (siempre activas vía .motion-purposeful en .app):
+   nada queda oculto y las tarjetas que no son botones no se elevan. */
 
 /* Elevación solo en lo que se puede pulsar: las tarjetas no son botones. */
 .app.motion-purposeful
