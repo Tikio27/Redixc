@@ -342,3 +342,187 @@
     display: none;
   }
 }
+
+/* Cobertura: aviso único, pasos, atención local y planes. */
+.hybrid .coverage-panel .coverage-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 14px !important;
+}
+.hybrid .coverage-panel .coverage-disclaimer > svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--accent);
+}
+.hybrid .coverage-info > h2 {
+  margin: 8px 0 20px;
+  font-size: 26px;
+}
+.hybrid .coverage-steps {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hybrid .coverage-steps > li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.hybrid .coverage-step-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--accent);
+}
+.hybrid .coverage-step-number {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+.hybrid .coverage-steps h3 {
+  margin: 2px 0 4px;
+  font-size: 18px;
+}
+.hybrid .coverage-steps p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.hybrid .coverage-office {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  padding-block: 56px;
+  border-top: 1px solid var(--line);
+}
+.hybrid .coverage-office figure {
+  margin: 0;
+}
+.hybrid .coverage-office img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 18px;
+}
+.hybrid .coverage-office figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.hybrid .coverage-office figcaption a {
+  color: var(--accent);
+}
+.hybrid .coverage-office-copy h2 {
+  margin: 8px 0 12px;
+  font-size: 34px;
+}
+.hybrid .coverage-office-copy > p {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+.hybrid .coverage-office address {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.hybrid .coverage-office address > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent);
+}
+.hybrid .coverage-office-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.hybrid .coverage-office-actions .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+}
+.hybrid .contact-modal #contact-address {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.hybrid .contact-modal #contact-address:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.hybrid .contact-modal label[for="contact-address"] {
+  display: block;
+  margin: 4px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+@media (max-width: 850px) {
+  .hybrid .coverage-office {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-block: 40px;
+  }
+  .hybrid .coverage-office-copy h2 {
+    font-size: 28px;
+  }
+}
+
+/* Inicio: los tres beneficios alineados por arriba (títulos e iconos a la
+   misma altura) aunque el tercero sea más alto por su enlace. */
+.app.hybrid .home-benefits {
+  align-items: stretch;
+}
+.app.hybrid .home-benefits .home-benefit {
+  align-items: flex-start;
+}
+.app.hybrid .home-benefits .home-benefit > svg {
+  margin-top: 2px;
+}
+/* Inicio: enlace a la historia dentro del tercer beneficio. */
+.hybrid .home-benefit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  /* The last benefit had its own padding (19px 6px) and drifted right. */
+  .app.hybrid .home-benefits .home-benefit:last-child {
+    padding: 0 0 4px;
+  }
+  .app.hybrid .home-benefits .home-benefit {
+    align-items: flex-start;
+  }
+  .app.hybrid .home-benefits .home-benefit > svg {
+    margin-top: 2px;
+  }
+}

@@ -151,6 +151,97 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
     });
   });
 
+  group("cobertura-modulos", async (browser) => {
+    for (const [label, viewport] of [["1440", DESKTOP], ["390", MOBILE]])
+      await check(`cobertura-modulos: contenido de la página @${label}`, async () => {
+        const { page, context } = await open(browser, P("/cobertura"), viewport);
+        const s = await page.evaluate(() => {
+          const main = document.querySelector("main");
+          const office = document.querySelector(".coverage-office");
+          return {
+            disclaimers: (main.innerText.match(/no confirma (la )?cobertura/gi) || []).length,
+            steps: [...document.querySelectorAll(".coverage-steps > li h3")].map((h) => h.textContent.trim()),
+            officeText: office?.innerText || "",
+            maps: office?.querySelector("a[href*='maps']")?.href || "",
+            tel: !!office?.querySelector('a[href="tel:+523111447676"]'),
+            caption: office?.querySelector("figcaption")?.textContent || "",
+            muralAlt: office?.querySelector("img")?.alt || "",
+            community: document.querySelector(".coverage-community") !== null,
+            plans: [...document.querySelectorAll(".coverage-plans .plan")].map((c) => c.dataset.plan),
+            allPlans: !!document.querySelector('.coverage-plans a[href="/planes"]'),
+          };
+        });
+        await context.close();
+        assert(s.disclaimers === 1, `${s.disclaimers} coverage disclaimers`);
+        assert(JSON.stringify(s.steps) === JSON.stringify(
+          ["Elige tu localidad", "Envíanos una referencia", "Te confirmamos"]), `steps ${s.steps}`);
+        assert(s.officeText.includes("Rafael Mejía Amaral #55, El Botadero"), "office lacks address");
+        assert(s.maps === "https://maps.app.goo.gl/N9wUGfgTxWjugjJT7", `maps: ${s.maps}`);
+        assert(s.tel, "office lacks phone link");
+        assert(/Águilas del Botadero/.test(s.caption) && /deportivo/.test(s.caption), `caption: ${s.caption}`);
+        assert(/mural|muro/i.test(s.muralAlt), `alt: ${s.muralAlt}`);
+        assert(!s.community, "community strip should live on Inicio, not Cobertura");
+        assert(JSON.stringify(s.plans) === JSON.stringify(["Básico", "Plus", "Ultra"]), `plans ${s.plans}`);
+        assert(s.allPlans, "no link to all plans");
+      });
+    await check("cobertura-modulos: la referencia del domicilio va en el mensaje", async () => {
+      const { page, context } = await open(browser, P("/cobertura"));
+      await page.locator(".coverage-panel button", { hasText: "Villa Juárez" }).click();
+      await page.waitForTimeout(500);
+      const field = page.locator("#contact-address");
+      const label = await page.locator('label[for="contact-address"]').textContent();
+      await field.fill("Calle Morelos 5, frente a la tienda");
+      const s = await page.evaluate(() => ({
+        message: document.querySelector(".message-preview p").textContent,
+        hint: document.querySelector(".contact-modal").innerText.includes("compartir tu ubicación"),
+        href: decodeURIComponent(document.querySelector(".modal-actions a").href),
+      }));
+      await context.close();
+      assert(/Calle, número o referencia/.test(label) && /opcional/.test(label), `label: ${label}`);
+      assert(s.message.includes("Mi domicilio o referencia: Calle Morelos 5, frente a la tienda."), `message: ${s.message}`);
+      assert(s.href.includes("Calle Morelos 5"), "WhatsApp link lacks the reference");
+      assert(s.hint, "no hint about sharing location");
+    });
+  });
+
+  group("inicio-beneficios", async (browser) => {
+    for (const [label, viewport] of [["1440", DESKTOP], ["390", MOBILE]])
+      await check(`inicio-beneficios: tres beneficios con la historia @${label}`, async () => {
+        const { page, context } = await open(browser, P("/"), viewport);
+        const s = await page.evaluate(() => {
+          const items = [...document.querySelectorAll(".home-benefits .home-benefit")];
+          return {
+            titles: items.map((i) => i.querySelector("h2")?.textContent.trim()),
+            first: items[0]?.innerText || "",
+            link: items[2]?.querySelector('a[href="/nosotros"]')?.textContent.trim(),
+            third: items[2]?.innerText || "",
+          };
+        });
+        await context.close();
+        assert(JSON.stringify(s.titles) === JSON.stringify(
+          ["Mes a mes, sin sorpresas", "Técnicos locales", "Parte de tu comunidad"]), `titles ${s.titles}`);
+        assert(/plazos forzosos/.test(s.first) && /precios fijos/i.test(s.first), `first: ${s.first}`);
+        assert(/escuelas/.test(s.third) && /comisariado ejidal/.test(s.third), `third: ${s.third}`);
+        assert(s.link === "Conoce nuestra historia", `link: ${s.link}`);
+      });
+    for (const [label, viewport] of [["1440", DESKTOP], ["1024", { width: 1024, height: 800 }]])
+      await check(`inicio-beneficios: títulos e iconos alineados @${label}`, async () => {
+        const { page, context } = await open(browser, P("/"), viewport);
+        const s = await page.evaluate(() =>
+          [...document.querySelectorAll(".home-benefits .home-benefit")].map((i) => ({
+            title: i.querySelector("h2").getBoundingClientRect().top,
+            icon: i.querySelector("svg").getBoundingClientRect().top,
+            width: i.getBoundingClientRect().width,
+          })),
+        );
+        await context.close();
+        const spread = (k) => Math.max(...s.map((x) => x[k])) - Math.min(...s.map((x) => x[k]));
+        assert(spread("title") <= 1, `title tops differ by ${spread("title")}px`);
+        assert(spread("icon") <= 1, `icon tops differ by ${spread("icon")}px`);
+        assert(spread("width") <= 30, `column widths differ by ${spread("width")}px`);
+      });
+  });
+
   group("cobertura", async (browser) => {
     await check("cobertura: una acción por localidad", async () => {
       const { page, context } = await open(browser, P("/cobertura"), MOBILE);
@@ -378,7 +469,7 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
         assert(JSON.stringify(s.options) ===
           JSON.stringify(["El Botadero", "Pueblo Nuevo", "Villa Juárez", "El Carrizo"]), `options ${s.options}`);
         assert(s.heights.every((h) => h >= 44), `heights ${s.heights}`);
-        assert(message.includes("Mi localidad o referencia es Villa Juárez."), `message: ${message}`);
+        assert(message.includes("Mi localidad es Villa Juárez."), `message: ${message}`);
         assert(next === "El Carrizo", `arrow key moved to ${next}`);
       });
     await check("selectores: personas con control segmentado en el recomendador", async () => {

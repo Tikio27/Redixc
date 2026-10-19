@@ -54,6 +54,8 @@ Es la versión definitiva del rediseño, lista para publicarse más adelante. La
 - Cobertura: un botón por localidad. Sin desplegables: la localidad se elige con fichas y las personas con un control segmentado.
 - Cabecera móvil con WhatsApp rotulado y el tema dentro del menú; texto mínimo de 12 px; footer móvil a 13 px.
 - Foto de Planes `hero-planes-eleccion.webp` (generada; no son clientes).
+- Cobertura: aviso único, «Así confirmamos tu cobertura» en 3 pasos, «Estamos en El Botadero» (mural de Águilas del Botadero, dirección, «Cómo llegar» con https://maps.app.goo.gl/N9wUGfgTxWjugjJT7, teléfono y WhatsApp), 3 planes y preguntas frecuentes. La consulta admite «Calle, número o referencia (opcional)», que se añade al mensaje de WhatsApp.
+- Inicio: tres beneficios alineados — «Mes a mes, sin sorpresas», «Técnicos locales» y «Parte de tu comunidad» con enlace a la historia.
 - Movimiento: bases en `motion-purposeful.css` (nada queda oculto, sin elevación en tarjetas estáticas) y transiciones en `expressiveMotion.js` y `motion-expressive.css`: tarjeta → diálogo, recomendador → plan, un momento del hero por sesión, fundido de tema, plegables animados, entradas al scroll y menú en cascada. Con movimiento reducido no hay desplazamientos; sin View Transitions, el diálogo crece desde su botón.
 
 Datos de planes en `src/site/plans.js`. Pruebas: `npm test` (unitarias) y, con `npm run dev` en marcha, `npm run test:e2e` (Playwright con el `playwright-core` ya instalado en otro proyecto local; variable `PLAYWRIGHT_CORE` para cambiarlo).

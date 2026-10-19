@@ -8,6 +8,7 @@ import {
   formatoUrl,
   IFT_VISOR_URL,
   ADDRESS,
+  MAPS_URL,
 } from "./plans.js";
 
 test("plans carry the published IFT registration numbers", () => {
@@ -47,6 +48,7 @@ test("formatoUrl points at the plan's simplified format", () => {
 
 test("published contact data and localities are unchanged", () => {
   assert.equal(IFT_VISOR_URL, "https://tarifas.ift.org.mx/ift_visor/");
+  assert.equal(MAPS_URL, "https://maps.app.goo.gl/N9wUGfgTxWjugjJT7");
   assert.equal(
     ADDRESS,
     "Rafael Mejía Amaral #55, El Botadero, Santiago Ixcuintla, Nayarit, C.P. 63575",

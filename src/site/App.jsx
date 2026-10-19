@@ -25,6 +25,7 @@ import {
   formatoUrl,
   IFT_VISOR_URL,
   ADDRESS,
+  MAPS_URL,
 } from "./plans";
 import {
   ArrowRight,
@@ -53,6 +54,7 @@ import {
   Copy,
   CheckCircle,
   Users,
+  Heart,
   Phone,
   Envelope,
   RadioButton,
@@ -759,34 +761,123 @@ function App() {
                   ))}
                 </div>
                 <p className="coverage-disclaimer">
-                  Disponibilidad sujeta a validación en tu domicilio.
+                  <ShieldCheck size={18} aria-hidden="true" />
+                  Seleccionar una localidad no confirma cobertura: la revisamos
+                  para tu domicilio.
                 </p>
               </div>
-              <aside className="coverage-info">
-                <span className="eyebrow">
-                  SANTIAGO IXCUINTLA Y LOCALIDADES
-                </span>
-                <h3>Cada dirección merece una revisión.</h3>
-                <p>
-                  La disponibilidad depende de la ubicación y las condiciones de
-                  instalación. Seleccionar una localidad no confirma cobertura
-                  en todo su territorio.
-                </p>
-                <p className="fineprint">
-                  Consulta con nuestro equipo la disponibilidad para tu
-                  domicilio.
-                </p>
+              <aside className="coverage-info" aria-labelledby="steps-coverage">
+                <span className="eyebrow">SANTIAGO IXCUINTLA Y LOCALIDADES</span>
+                <h2 id="steps-coverage">Así confirmamos tu cobertura</h2>
+                <ol className="coverage-steps">
+                  {[
+                    [
+                      MapPin,
+                      "Elige tu localidad",
+                      "Toca tu localidad para preparar la consulta por WhatsApp.",
+                    ],
+                    [
+                      House,
+                      "Envíanos una referencia",
+                      "Calle, número o un punto cercano. En WhatsApp también puedes compartir tu ubicación.",
+                    ],
+                    [
+                      CheckCircle,
+                      "Te confirmamos",
+                      "Nuestro equipo revisa tu domicilio y te confirma la disponibilidad y el costo de instalación.",
+                    ],
+                  ].map(([Icon, title, desc], i) => (
+                    <li key={title}>
+                      <span className="coverage-step-icon" aria-hidden="true">
+                        <Icon size={22} weight="light" />
+                      </span>
+                      <div>
+                        <span className="coverage-step-number">Paso {i + 1}</span>
+                        <h3>{title}</h3>
+                        <p>{desc}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
               </aside>
+            </section>
+            <section
+              className="shell coverage-office"
+              aria-labelledby="office-title"
+            >
+              <figure>
+                <img
+                  src="/assets/community/aguilas-redixc.jpg"
+                  alt="Mural azul de Redixc con el teléfono 311 144 7676 en el espacio deportivo de El Botadero"
+                  loading="lazy"
+                  width="1280"
+                  height="960"
+                />
+                <figcaption>
+                  Mural de Redixc en el espacio deportivo de El Botadero · Foto:{" "}
+                  <a
+                    href="https://www.facebook.com/aguilas.del.botadero.2025/posts/pfbid0AwHRWbcMVPo5qNa5R4K4oz4yruQnxZCZKQasSkyaVQbowFCwzbP2p7ABtB1mZk83l"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Águilas del Botadero
+                  </a>
+                </figcaption>
+              </figure>
+              <div className="coverage-office-copy">
+                <span className="eyebrow">ATENCIÓN LOCAL</span>
+                <h2 id="office-title">Estamos en El Botadero</h2>
+                <p>
+                  Te atienden técnicos locales, de tu comunidad. Escríbenos,
+                  llámanos o visítanos.
+                </p>
+                <address>
+                  <MapPin size={20} aria-hidden="true" />
+                  {ADDRESS}
+                </address>
+                <div className="coverage-office-actions">
+                  <a
+                    className="button secondary"
+                    href={MAPS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Cómo llegar <ArrowUpRight size={17} />
+                  </a>
+                  <a className="button secondary" href="tel:+523111447676">
+                    <Phone size={18} /> 311 144 7676
+                  </a>
+                  <button className="button" onClick={() => openContact()}>
+                    <WhatsappLogo size={20} /> WhatsApp
+                  </button>
+                </div>
+              </div>
+            </section>
+            <section
+              className="section shell coverage-plans"
+              aria-labelledby="coverage-plans-title"
+            >
+              <div className="section-heading centered">
+                <h2 id="coverage-plans-title">
+                  Mientras confirmamos, conoce los planes
+                </h2>
+                <p>Precios en MXN al mes, con impuestos incluidos.</p>
+              </div>
+              <div className="plans-grid preview-plans">
+                {[plans[0], plans[2], plans[4]].map((p) => planCard(p))}
+              </div>
+              <div className="plans-note">
+                <Link className="text-link" to={href("planes")}>
+                  Ver los 6 planes <ArrowRight size={18} />
+                </Link>
+              </div>
             </section>
             <section className="section shell faq-section">
               <div className="section-heading">
-                <h2>Confirmamos tu cobertura.</h2>
-                <p>
-                  Selecciona una de nuestras localidades. Revisamos la
-                  disponibilidad para tu domicilio antes de contratar.
-                </p>
+                <span className="eyebrow">PREGUNTAS FRECUENTES</span>
+                <h2>Sobre la cobertura</h2>
               </div>
-              <Faq items={[faqs[0], faqs[2]]} />
+              <Faq items={[faqs[0], faqs[2], faqs[5]]} />
             </section>
           </>
         )}
@@ -1328,6 +1419,7 @@ function ContactModal({
   const locationText = locality;
   const [copied, setCopied] = useState(false);
   const [details, setDetails] = useState("");
+  const [address, setAddress] = useState("");
   const [copyError, setCopyError] = useState(false);
   const ref = useRef(null);
   const firstRef = useRef(null);
@@ -1423,10 +1515,13 @@ function ContactModal({
           `Hola Redixc, me interesa ${plan ? `el plan ${plan.name}, $${plan.price} al mes, con ${plan.down} Mbps de descarga y ${plan.up} Mbps de subida` : "su servicio de internet de fibra óptica"}.`,
           ...(locationText
             ? [
-                " Mi localidad o referencia es ",
+                " Mi localidad es ",
                 change(`loc-${locationText}`, locationText),
                 ".",
               ]
+            : []),
+          ...(address.trim()
+            ? [" Mi domicilio o referencia: ", change("addr", address.trim()), "."]
             : []),
           " ¿Podrían confirmar la cobertura, el costo de instalación y las condiciones para contratar?",
         ];
@@ -1514,10 +1609,27 @@ function ContactModal({
           </div>
         </fieldset>
         {data.kind !== "soporte" && (
-          <p className="fineprint">
-            Nuestro equipo confirma la cobertura para tu domicilio. Elegir una
-            localidad no confirma disponibilidad.
-          </p>
+          <>
+            <label htmlFor="contact-address">
+              Calle, número o referencia (opcional)
+            </label>
+            <input
+              id="contact-address"
+              type="text"
+              autoComplete="street-address"
+              maxLength={160}
+              placeholder="Ej. calle y número, o «frente a la plaza»"
+              value={address}
+              onChange={(e) => {
+                setAddress(e.target.value);
+                setCopied(false);
+              }}
+            />
+            <p className="fineprint">
+              En WhatsApp también puedes compartir tu ubicación. Nuestro equipo
+              confirma la cobertura para tu domicilio.
+            </p>
+          </>
         )}
         {data.kind === "soporte" && (
           <>
@@ -1597,19 +1709,29 @@ function HomeBenefits() {
       aria-label="Beneficios del servicio"
     >
       {[
-        [CalendarCheck, "Mes a mes", "Sin plazos forzosos."],
+        [
+          CalendarCheck,
+          "Mes a mes, sin sorpresas",
+          "Sin plazos forzosos y con precios fijos cada mes.",
+        ],
         [Users, "Técnicos locales", "Atención de personas de tu comunidad."],
         [
-          Tag,
-          "Sin aumentos sorpresa",
-          "Precios fijos para que sepas cuánto pagar cada mes.",
+          Heart,
+          "Parte de tu comunidad",
+          "Internet gratuito para escuelas, la clínica y el comisariado ejidal.",
+          ["/nosotros", "Conoce nuestra historia"],
         ],
-      ].map(([Icon, title, desc]) => (
+      ].map(([Icon, title, desc, link]) => (
         <div className="home-benefit" key={title}>
           <Icon size={43} weight="light" />
           <div>
             <h2>{title}</h2>
             <p>{desc}</p>
+            {link && (
+              <Link className="text-link home-benefit-link" to={link[0]}>
+                {link[1]} <ArrowRight size={16} />
+              </Link>
+            )}
           </div>
         </div>
       ))}

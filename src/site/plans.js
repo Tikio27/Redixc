@@ -85,6 +85,8 @@ export const documents = [
 
 // Datos publicados en redixc.net (19/10/2026).
 export const IFT_VISOR_URL = "https://tarifas.ift.org.mx/ift_visor/";
+// Ubicación de la oficina proporcionada por Redixc (19/10/2026).
+export const MAPS_URL = "https://maps.app.goo.gl/N9wUGfgTxWjugjJT7";
 export const ADDRESS =
   "Rafael Mejía Amaral #55, El Botadero, Santiago Ixcuintla, Nayarit, C.P. 63575";
 
