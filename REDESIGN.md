@@ -1,6 +1,6 @@
 # Nuevo diseño de REDIXC
 
-El sitio principal usa el diseño aprobado de `demos/redesign`, integrado en `src/site` y servido por la aplicación de la raíz. El demo sigue disponible como referencia independiente y no se modificó durante la integración.
+El sitio principal usa el diseño aprobado del demo original, integrado en `src/site` y servido por la aplicación de la raíz. El demo se archivó en `archive/demos/redesign` (ver «Limpieza»).
 
 ## Páginas
 
@@ -37,7 +37,7 @@ La cabecera conserva los tres iconos horizontales de apariencia, con selección 
 
 Los ajustes visuales están en `src/site/refinements.css` y `src/site/motion.css`; las animaciones se implementan en `fluidMotion.js`, `PlanMotion.jsx` y `MotionPanel.jsx`, sin dependencias nuevas. La narrativa del hero fue retirada. Se conserva el tema del sitio con la clave `redixc-theme`.
 
-No se modificó `demos/redesign`.
+No se modificó el demo original (hoy en `archive/demos/redesign`).
 
 ## Nosotros y servicio a la comunidad
 
@@ -47,7 +47,7 @@ Se incorporaron cinco fotografías reales de los enlaces públicos facilitados, 
 
 ## Diseño final (aprobado el 19/10/2026)
 
-Es la versión definitiva del rediseño, lista para publicarse más adelante. Las comparativas locales (`demos/apple-comparison`, `demos/clarity-comparison`) se retiraron; `demos/redesign` sigue como referencia original. Plan y decisiones: `docs/superpowers/plans/2026-10-19-redixc-claridad.md`.
+Es la versión definitiva del rediseño, lista para publicarse más adelante. Las comparativas locales (`demos/apple-comparison`, `demos/clarity-comparison`) se retiraron; el demo original quedó archivado en `archive/demos/redesign`. Plan y decisiones: `archive/docs/superpowers/plans/2026-10-19-redixc-claridad.md`.
 
 - Datos publicados en redixc.net: número de inscripción IFT por plan, visor de tarifas de la Comisión Reguladora de Telecomunicaciones y dirección de El Botadero.
 - Planes: tarjetas primero, recomendador plegable y tabla de los 6 planes. Desde Inicio, el recomendador lleva a la tarjeta sugerida.
@@ -114,3 +114,11 @@ Rama `feat/portal-clientes`. Los clientes consultan estados de cuenta, facturas 
 - Nosotros: la introducción «Nuestro servicio a la comunidad» usa las mismas dos columnas que la historia (título a la izquierda, texto alineado con la columna de capítulos, ajustados por abajo). Se compararon tres opciones: a la izquierda (dejaba la mitad derecha vacía), centrada (rompía la alineación a la izquierda del resto de la página) y en dos columnas (elegida). En una columna (móvil, movimiento reducido o ventanas de 700 px de alto o menos) queda como antes.
 - Planes: con el recomendador cerrado quedaba un hueco de unos 120 px bajo la foto. Se sumaban el padding de la sección y el margen superior del recomendador, que venía de cuando iba después del catálogo. Ahora el espacio es el mismo que en Ayuda, Legal y Cobertura (32 px en móvil, 44 en escritorio). Prueba e2e en el grupo `espaciado`.
 - Diálogo de contacto (escritorio, sin View Transitions): el efecto que fija el origen de la animación cancela su animación al limpiarse. En desarrollo, StrictMode ejecutaba el efecto dos veces, medía la caja ya encogida y el diálogo crecía desde unos 30 px fuera del botón.
+
+## Limpieza (rama `chore/limpieza-archivos`)
+
+Lo que el sitio ya no usa se movió a `archive/` con su ruta original; `archive/README.md` lo detalla. Incluye el demo `demos/redesign`, los componentes e imágenes del sitio anterior, variantes de hero y logos, 4 fotos de comunidad sustituidas y el plan ya ejecutado. Se quitaron los scripts `dev:demo` y `build:demo`, y ESLint ignora `archive/`.
+
+URLs publicadas: las seis páginas, `/about` (redirige a `/nosotros`) y la página «no encontrada». El sitio no lee parámetros de URL; `?tema=` y `?movimiento=` solo los usan las pruebas. Todo `public/` se publica, así que `src/site/public-files.test.mjs` (dentro de `npm test`) exige que cada archivo de `public/` se use en el sitio, ya sea por nombre o con un patrón declarado en la prueba.
+
+Pendiente en otro PR: las dependencias que solo usaba el sitio anterior (Tailwind y su configuración, react-slick, slick-carousel, react-awesome-reveal, react-scroll y Emotion).

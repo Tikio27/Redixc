@@ -20,7 +20,7 @@ https://www.facebook.com/accion.cuidadana.botadero/posts/pfbid02qzJPQhuxShDVk2Hr
 - Autor: Accion Cuidadana Botadero.
 - Fecha visible: 19 de diciembre de 2024.
 - Contenido: agradece a Botanet por un cargamento de pelotas para una posada infantil.
-- Fotografía seleccionada: bolsas de pelotas. Archivo local `public/assets/community/posada-botadero-2024.jpg`, 501 × 383 px.
+- Fotografía seleccionada: bolsas de pelotas. Archivo local `archive/public/assets/community/posada-botadero-2024.jpg` (archivada: no se muestra en el sitio), 501 × 383 px.
 
 ### Plaza de El Botadero
 
@@ -29,7 +29,7 @@ https://www.facebook.com/accion.cuidadana.botadero/posts/pfbid0Fo3d9Uptghestwqy9
 - Autor: Accion Cuidadana Botadero.
 - Fecha visible: 25 de noviembre de 2025.
 - Contenido: agradece a Botanet por facilitar pintura para el proyecto comunitario. La fotografía muestra labores en los jardineros de la plaza, con fecha impresa del día anterior.
-- Archivo local `public/assets/community/plaza-botadero-2025.jpg`, 960 × 1276 px. No se afirma que Redixc haya ejecutado todo el trabajo ni financiado toda la obra.
+- Archivo local `archive/public/assets/community/plaza-botadero-2025.jpg` (archivada: no se muestra en el sitio), 960 × 1276 px. No se afirma que Redixc haya ejecutado todo el trabajo ni financiado toda la obra.
 
 ### Águilas del Botadero
 
@@ -73,7 +73,7 @@ https://www.facebook.com/evelin.padilladuran/posts/pfbid0b1rzpKAHUoTtYGPx4uuUfAr
 
 - Autora: Evelin Padilla Dürán. Fecha visible: 7 de octubre de 2020.
 - Convocatoria para donativos, pintura y mano de obra para la iglesia de Nuestra Señora de Guadalupe de El Botadero; no es un agradecimiento a Redixc/Botanet ni una confirmación de una donación concreta.
-- Fotografía de la iglesia con cordeles decorativos: `public/assets/community/iglesia-botadero-decorada-2020.jpg`, 720 × 592 px. Se explica en la página el contexto de esa imagen para no atribuir a Redixc la decoración fotografiada como hecho verificado.
+- Fotografía de la iglesia con cordeles decorativos: `archive/public/assets/community/iglesia-botadero-decorada-2020.jpg` (archivada: no se muestra en el sitio), 720 × 592 px. Se explica en la página el contexto de esa imagen para no atribuir a Redixc la decoración fotografiada como hecho verificado.
 - El apoyo a las fiestas patronales procede de la confirmación del propietario, sin fecha de un evento específico.
 
 ### Segundo enlace del grupo no accesible
@@ -86,7 +86,7 @@ El propietario precisó que su participación en el apoyo a la iglesia fue aport
 
 ## Sustitución de la imagen de la plaza
 
-A petición del propietario se sustituyó la foto de trabajos de 2025 por una vista de la plaza y el quiosco: `public/assets/community/plaza-botadero-vista.jpg`, 522 × 383 px, sin retoques. URL facilitada: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmN_qxaLe4oKoWbQy6CalIIqwdRkWD3nQlmOMukyIBR9e5JzBnJ1-1mmg&s=10
+A petición del propietario se sustituyó la foto de trabajos de 2025 por una vista de la plaza y el quiosco: `archive/public/assets/community/plaza-botadero-vista.jpg` (archivada: no se muestra en el sitio), 522 × 383 px, sin retoques. URL facilitada: https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmN_qxaLe4oKoWbQy6CalIIqwdRkWD3nQlmOMukyIBR9e5JzBnJ1-1mmg&s=10
 
 La imagen es una referencia del lugar, no una fotografía del apoyo de 2025. Se corrigió el texto alternativo y se conservó el enlace de la publicación como fuente del apoyo con pintura, con la etiqueta “Publicación del apoyo”. La imagen anterior permanece disponible en assets.
 
