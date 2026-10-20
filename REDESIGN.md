@@ -122,3 +122,7 @@ Lo que el sitio ya no usa se movió a `archive/` con su ruta original; `archive/
 URLs publicadas: las seis páginas, `/about` (redirige a `/nosotros`) y la página «no encontrada». El sitio no lee parámetros de URL; `?tema=` y `?movimiento=` solo los usan las pruebas. Todo `public/` se publica, así que `src/site/public-files.test.mjs` (dentro de `npm test`) exige que cada archivo de `public/` se use en el sitio, ya sea por nombre o con un patrón declarado en la prueba.
 
 Pendiente en otro PR: las dependencias que solo usaba el sitio anterior (Tailwind y su configuración, react-slick, slick-carousel, react-awesome-reveal, react-scroll y Emotion).
+
+## Imagen para redes sociales
+
+`public/og-image-redixc.jpg` (1200 × 630, JPEG de calidad 85, unos 190 KB) reemplaza a la PNG del sitio anterior, que queda en `archive/`. Sigue el hero de Inicio: panel claro con el logo, «FIBRA ÓPTICA · SANTIAGO IXCUINTLA», el eslogan «La fibra que te une al mundo.» con «al mundo.» en acento, «Planes de 30 a 150 Mbps para tu hogar, con atención local», «Desde $300 MXN / mes · impuestos incluidos» y redixc.net, junto a la foto `hero-planes.webp`. Va en JPEG para no pasar del límite aproximado de 300 KB de WhatsApp, y el nombre nuevo hace que las redes descarguen la imagen nueva en lugar de usar la anterior. `index.html` declara su tipo, sus dimensiones y un texto alternativo.
