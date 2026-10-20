@@ -10,6 +10,7 @@ Archivos que el sitio ya no usa, conservados como referencia. Nada de esta carpe
 | `public/assets` | Variantes de hero y logos que el rediseño no usa. |
 | `public/assets/community` | Fotos de comunidad sustituidas; su procedencia sigue en `src/site/community-sources.md`. |
 | `public/logoNoBgWhite.webp`, `public/logo_bg.svg` | Logos del sitio anterior. |
+| `public/og-image-redixc.png` | Imagen para redes sociales del sitio anterior, reemplazada por `public/og-image-redixc.jpg`. |
 | `docs/superpowers/plans` | Plan del rediseño de claridad, ya ejecutado. |
 
 Para recuperar un archivo, muévelo de vuelta a su ruta original y referencia su uso en el sitio: `src/site/public-files.test.mjs` falla si `public/` contiene archivos sin uso.
