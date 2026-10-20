@@ -27,6 +27,10 @@ import {
   ADDRESS,
   MAPS_URL,
   MURAL_SOURCE_URL,
+  PORTAL_URL,
+  HOLDER_NAME_MAX,
+  validateHolderName,
+  adminWhatsappUrl,
 } from "./plans";
 import {
   ArrowRight,
@@ -53,6 +57,7 @@ import {
   FileText,
   Copy,
   CheckCircle,
+  UserCircle,
   Users,
   Heart,
   Phone,
@@ -474,14 +479,34 @@ function App() {
                 {pageNames[p]}
               </Link>
             ))}
+            <a
+              className="nav-portal"
+              href={PORTAL_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <UserCircle size={19} aria-hidden="true" />
+              Portal de clientes
+              <span className="sr-only"> (se abre en una pestaña nueva)</span>
+            </a>
           </nav>
           <div className="header-actions">
+            <a
+              className="header-portal"
+              href={PORTAL_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <UserCircle size={18} aria-hidden="true" />
+              Portal de clientes
+              <span className="sr-only"> (se abre en una pestaña nueva)</span>
+            </a>
             <button
               className="whatsapp-nav"
               aria-label="Preparar consulta por WhatsApp"
               onClick={() => openContact()}
             >
-              <WhatsappLogo size={21} /> <span>WhatsApp</span>
+              <WhatsappLogo size={21} aria-hidden="true" /> <span>Escríbenos</span>
             </button>
             <ThemeControl theme={theme} setTheme={changeTheme} />
             <button
@@ -521,6 +546,19 @@ function App() {
                 <ArrowRight size={17} />
               </Link>
             ))}
+            <a
+              className="mobile-nav-portal"
+              href={PORTAL_URL}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setMenu(false)}
+            >
+              <span>
+                Portal de clientes
+                <span className="sr-only"> (se abre en una pestaña nueva)</span>
+              </span>
+              <ArrowUpRight size={17} />
+            </a>
             <div className="mobile-appearance">
               <span aria-hidden="true">Apariencia</span>
               <ThemeControl theme={theme} setTheme={changeTheme} />
@@ -1005,6 +1043,29 @@ function App() {
                   Necesito soporte <ArrowRight size={18} />
                 </button>
               </article>
+              <article className="help-portal" id="portal-clientes">
+                <div className="card-heading">
+                  <span className="card-heading-icon" aria-hidden="true">
+                    <UserCircle size={30} weight="light" />
+                  </span>
+                  <h2>Portal de clientes</h2>
+                </div>
+                <p>
+                  Consulta tus estados de cuenta, facturas y pagos, o levanta un
+                  ticket de soporte.
+                </p>
+                <a
+                  className="button"
+                  href={PORTAL_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Ingresar al portal
+                  <span className="sr-only"> (se abre en una pestaña nueva)</span>
+                  <ArrowUpRight size={18} />
+                </a>
+                <PortalAccessHelp />
+              </article>
             </section>
             <section className="section shell faq-section">
               <div className="section-heading">
@@ -1102,9 +1163,13 @@ function App() {
               <MapPin size={17} />
               {ADDRESS}
             </span>
-            <button className="footer-whatsapp" onClick={() => openContact()}>
-              <WhatsappLogo size={19} />
-              WhatsApp
+            <button
+              className="footer-whatsapp"
+              aria-label="Escríbenos por WhatsApp"
+              onClick={() => openContact()}
+            >
+              <WhatsappLogo size={19} aria-hidden="true" />
+              Escríbenos
             </button>
           </div>
         </div>
@@ -1404,6 +1469,58 @@ function Faq({ items }) {
     </div>
   );
 }
+function PortalAccessHelp() {
+  const [name, setName] = useState("");
+  const [error, setError] = useState(null);
+  const inputRef = useRef(null);
+
+  const submit = (event) => {
+    event.preventDefault();
+    const result = validateHolderName(name);
+    setError(result.error);
+    if (result.error) {
+      inputRef.current?.focus();
+      return;
+    }
+    setName(result.name);
+    window.open(adminWhatsappUrl(result.name), "_blank", "noopener,noreferrer");
+  };
+
+  return (
+    <form className="help-portal-form" noValidate onSubmit={submit}>
+      <p className="help-portal-note">
+        Si no conoces tu usuario o contraseña, escribe a nombre de quién está
+        el servicio y te comunicamos con Administración de Redixc por WhatsApp.
+      </p>
+      <label htmlFor="portal-holder">Nombre del titular del servicio</label>
+      <div className="help-portal-row">
+        <input
+          ref={inputRef}
+          id="portal-holder"
+          type="text"
+          autoComplete="name"
+          maxLength={HOLDER_NAME_MAX}
+          placeholder="Como aparece en tu contrato"
+          value={name}
+          aria-invalid={error ? "true" : undefined}
+          aria-describedby={error ? "portal-holder-error" : undefined}
+          onChange={(e) => {
+            setName(e.target.value);
+            if (error) setError(null);
+          }}
+        />
+        <button className="button secondary" type="submit">
+          <WhatsappLogo size={18} aria-hidden="true" /> Escribir a Administración
+          <span className="sr-only"> (se abre WhatsApp en una pestaña nueva)</span>
+        </button>
+      </div>
+      <p id="portal-holder-error" className="help-portal-error" aria-live="polite">
+        {error}
+      </p>
+    </form>
+  );
+}
+
 function ContactBanner({ openContact }) {
   return (
     <section className="contact-banner shell">
@@ -1450,13 +1567,15 @@ function ContactModal({
     const box = el.getBoundingClientRect();
     const o = data.origin;
     el.style.transformOrigin = `${o.left + o.width / 2 - box.left}px ${o.top + o.height / 2 - box.top}px`;
-    el.animate(
+    const animation = el.animate(
       [
         { opacity: 0, transform: "scale(.96)" },
         { opacity: 1, transform: "none" },
       ],
       { duration: 200, easing: "cubic-bezier(.2,.8,.2,1)" },
     );
+    // If the effect re-runs (StrictMode), measure the unscaled box again.
+    return () => animation.cancel();
   }, [anchored]);
   const closeAnchored = () => {
     if (closing.current) return;

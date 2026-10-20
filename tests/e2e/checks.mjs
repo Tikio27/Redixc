@@ -476,7 +476,7 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
       assert(s.prepare === 0, "a duplicate «Preparar consulta» button remains");
       assert(locality === "Pueblo Nuevo", `dialog locality: ${locality}`);
     });
-    await check("cabecera móvil: WhatsApp con texto y tema en el menú", async () => {
+    await check("cabecera móvil: WhatsApp con icono y nombre accesible, tema en el menú", async () => {
       const { page, context } = await open(browser, P("/"), MOBILE);
       const s = await page.evaluate(() => {
         const vis = (el) => !!el && el.getBoundingClientRect().width > 0 &&
@@ -485,6 +485,7 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
         return {
           headerTheme: vis(document.querySelector(".header-actions .theme-control")),
           waText: wa.innerText.trim(),
+          waLabel: wa.getAttribute("aria-label"),
           waH: wa.getBoundingClientRect().height,
           brandH: document.querySelector(".brand").getBoundingClientRect().height,
         };
@@ -506,7 +507,8 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
       );
       await context.close();
       assert(!s.headerTheme, "theme control still visible in the mobile header");
-      assert(s.waText === "WhatsApp" && s.waH >= 44, `WhatsApp "${s.waText}" ${s.waH}px`);
+      assert(s.waText === "" && s.waH >= 44, `WhatsApp "${s.waText}" ${s.waH}px`);
+      assert(s.waLabel === "Preparar consulta por WhatsApp", `aria-label ${s.waLabel}`);
       assert(s.brandH >= 44, `brand link ${s.brandH}px tall`);
       assert(inMenu === 1, "theme group not inside the mobile menu");
       assert(after.theme === "dark" && after.open === "true", `after: ${JSON.stringify(after)}`);
@@ -1016,6 +1018,182 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
       );
       await context.close();
       assert(transforms === 0, `${transforms} transform keyframes`);
+    });
+  });
+
+  // Espacio entre la foto de la introducción y el primer contenido: Planes
+  // sigue a Ayuda, Legal y Cobertura (antes sumaba ~120 px con el recomendador cerrado).
+  group("espaciado", async (browser) => {
+    for (const [label, viewport] of [["móvil", MOBILE], ["escritorio", DESKTOP]]) {
+      await check(`espaciado: Planes bajo la foto igual que Ayuda (${label})`, async () => {
+        const gap = async (route, selector) => {
+          const { page, context } = await open(browser, P(route), viewport);
+          const g = await page.evaluate((sel) => {
+            const img = document.querySelector(".page-intro-image").getBoundingClientRect();
+            const copy = document.querySelector(".page-intro-copy").getBoundingClientRect();
+            return Math.round(document.querySelector(sel).getBoundingClientRect().top - Math.max(img.bottom, copy.bottom));
+          }, selector);
+          await context.close();
+          return g;
+        };
+        const planes = await gap("/planes", ".recommender-disclosure");
+        const ayuda = await gap("/ayuda", ".help-options > article");
+        assert(Math.abs(planes - ayuda) <= 2, `Planes ${planes}px vs Ayuda ${ayuda}px`);
+      });
+    }
+  });
+
+  // Portal de clientes: enlaces a clientes.redixc.net en una pestaña nueva.
+  group("portal", async (browser) => {
+    const PORTAL = "https://clientes.redixc.net/";
+    const linkAttrs = (a) => a.evaluate((e) => [e.getAttribute("href"), e.getAttribute("target")]);
+    const newTab = (href, target, expected) =>
+      assert(href === expected && target === "_blank", `${href} target=${target}`);
+    for (const tema of ["light", "dark"]) {
+      await check(`portal: navegación de escritorio (${tema})`, async () => {
+        const { page, context, errors } = await open(browser, `/?tema=${tema}`);
+        const link = page.locator(".desktop-nav a", { hasText: "Portal de clientes" });
+        const [href, target] = await linkAttrs(link);
+        const visible = await link.isVisible();
+        await context.close();
+        assert(visible, "not visible");
+        newTab(href, target, PORTAL);
+        assert(errors.length === 0, errors.join("; "));
+      });
+      await check(`portal: cabecera móvil (${tema})`, async () => {
+        const { page, context, errors } = await open(browser, `/?tema=${tema}`, MOBILE);
+        const link = page.locator(".header-actions a.header-portal");
+        const visible = await link.isVisible();
+        const [href, target] = await linkAttrs(link);
+        const name = (await link.textContent()).replace(/\s+/g, " ").trim();
+        const wa = await page.locator(".whatsapp-nav").getAttribute("aria-label");
+        await context.close();
+        assert(visible, "not visible");
+        newTab(href, target, PORTAL);
+        assert(name.startsWith("Portal de clientes"), name);
+        assert(wa === "Preparar consulta por WhatsApp", `whatsapp label ${wa}`);
+        assert(errors.length === 0, errors.join("; "));
+      });
+      await check(`portal: menú móvil (${tema})`, async () => {
+        const { page, context, errors } = await open(browser, `/?tema=${tema}`, MOBILE);
+        await page.locator(".menu-toggle").click();
+        const link = page.locator("#mobile-navigation a", { hasText: "Portal de clientes" });
+        await link.waitFor({ state: "visible" });
+        const [href, target] = await linkAttrs(link);
+        await context.close();
+        newTab(href, target, PORTAL);
+        assert(errors.length === 0, errors.join("; "));
+      });
+      await check(`portal: tarjeta en Ayuda (${tema})`, async () => {
+        const { page, context, errors } = await open(browser, `/ayuda?tema=${tema}`, MOBILE);
+        const card = page.locator("#portal-clientes");
+        const title = await card.locator("h2").textContent();
+        const [href, target] = await linkAttrs(card.locator("a.button", { hasText: "Ingresar al portal" }));
+        const input = card.locator("#portal-holder");
+        const submit = card.locator("button[type=submit]");
+        const error = card.locator(".help-portal-error");
+        await page.evaluate(() => {
+          window.__opened = [];
+          window.open = (...args) => (window.__opened.push(args), null);
+        });
+        await submit.click();
+        const emptyError = (await error.textContent()).trim();
+        const emptyFocus = await input.evaluate((e) => e === document.activeElement);
+        await input.fill('<script>alert(1)</script>');
+        await submit.click();
+        const scriptError = (await error.textContent()).trim();
+        const invalid = await input.getAttribute("aria-invalid");
+        const injected = await page.evaluate(() => document.querySelectorAll("main script").length);
+        const openedBefore = await page.evaluate(() => window.__opened.length);
+        await input.fill("  María   Peña ");
+        await submit.click();
+        const opened = await page.evaluate(() => window.__opened);
+        const cleaned = await input.inputValue();
+        const html = await page.locator("main").innerHTML();
+        await context.close();
+        assert(title === "Portal de clientes", title);
+        newTab(href, target, PORTAL);
+        assert(emptyError && emptyFocus, `empty: "${emptyError}" focus=${emptyFocus}`);
+        assert(scriptError && invalid === "true", `script: "${scriptError}" invalid=${invalid}`);
+        assert(injected === 0 && openedBefore === 0, `scripts=${injected} opened=${openedBefore}`);
+        assert(opened.length === 1, `opened ${opened.length}`);
+        const [wa, waTarget, features] = opened[0];
+        const url = new URL(wa);
+        assert(url.origin + url.pathname === "https://wa.me/523338454848", wa);
+        assert(/El servicio está a nombre de María Peña\./.test(url.searchParams.get("text")), wa);
+        assert(waTarget === "_blank" && /noopener/.test(features), `${waTarget} ${features}`);
+        assert(cleaned === "María Peña", cleaned);
+        assert(!/3845 ?4848|tel:\+52333845/.test(html), "admin phone visible");
+        assert(errors.length === 0, errors.join("; "));
+      });
+    }
+    for (const width of [320, 360, 375, 390, 430, 600, 700, 850, 851, 960, 1024, 1100, 1280, 1440]) {
+      await check(`portal: cabecera sin desbordamiento @${width}`, async () => {
+        const mobile = width < 851;
+        const { page, context } = await open(browser, "/ayuda?tema=light", {
+          width, height: 800, isMobile: mobile, hasTouch: mobile,
+        });
+        const r = await page.evaluate(() => {
+          const inner = document.querySelector(".header-inner");
+          const nav = document.querySelector(".desktop-nav");
+          const links = [...nav.querySelectorAll("a")];
+          const tops = new Set(links.filter((a) => a.offsetParent).map((a) => Math.round(a.getBoundingClientRect().top)));
+          return {
+            page: document.documentElement.scrollWidth - innerWidth,
+            header: inner.scrollWidth - inner.clientWidth,
+            rows: tops.size,
+          };
+        });
+        await context.close();
+        assert(r.page <= 0 && r.header <= 0, `page +${r.page}px, header +${r.header}px`);
+        assert(r.rows <= 1, `nav wraps into ${r.rows} rows`);
+      });
+    }
+    for (const [width, mobile] of [[700, true], [1440, false]]) {
+      await check(`portal: WhatsApp rotulado «Escríbenos» @${width}`, async () => {
+        const { page, context } = await open(browser, "/?tema=light", {
+          width, height: 800, isMobile: mobile, hasTouch: mobile,
+        });
+        const text = (await page.locator(".whatsapp-nav").innerText()).trim();
+        const footer = page.locator(".footer-whatsapp");
+        const footerText = (await footer.innerText()).trim();
+        const footerLabel = await footer.getAttribute("aria-label");
+        await context.close();
+        assert(text === "Escríbenos", text);
+        assert(footerText === "Escríbenos" && footerLabel === "Escríbenos por WhatsApp", `${footerText} / ${footerLabel}`);
+      });
+    }
+    await check("portal: teclado en escritorio", async () => {
+      const { page, context } = await open(browser, "/?tema=light");
+      let reached = false;
+      for (let i = 0; i < 12 && !reached; i++) {
+        await page.keyboard.press("Tab");
+        reached = await page.evaluate(() => document.activeElement?.classList.contains("nav-portal"));
+      }
+      const outline = await page.evaluate(() => getComputedStyle(document.activeElement).outlineStyle);
+      await context.close();
+      assert(reached, "Tab never reached the portal link");
+      assert(outline !== "none", "no focus outline");
+    });
+    await check("portal: teclado en menú móvil y Escape", async () => {
+      const { page, context } = await open(browser, "/?tema=light", MOBILE);
+      await page.locator(".menu-toggle").focus();
+      await page.keyboard.press("Enter");
+      await page.locator(".mobile-nav-portal").waitFor({ state: "visible" });
+      let reached = false;
+      for (let i = 0; i < 12 && !reached; i++) {
+        await page.keyboard.press("Tab");
+        reached = await page.evaluate(() => document.activeElement?.classList.contains("mobile-nav-portal"));
+      }
+      await page.keyboard.press("Escape");
+      await page.waitForTimeout(400);
+      const state = await page.evaluate(() => [
+        document.querySelector(".menu-toggle").getAttribute("aria-expanded"),
+        document.activeElement?.classList.contains("menu-toggle"),
+      ]);
+      await context.close();
+      assert(reached, "Tab never reached the portal link");
+      assert(state[0] === "false" && state[1], `expanded=${state[0]} focusOnToggle=${state[1]}`);
     });
   });
 }

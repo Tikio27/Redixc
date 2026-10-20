@@ -9,6 +9,9 @@ import {
   IFT_VISOR_URL,
   ADDRESS,
   MAPS_URL,
+  PORTAL_URL,
+  validateHolderName,
+  adminWhatsappUrl,
 } from "./plans.js";
 
 test("plans carry the published IFT registration numbers", () => {
@@ -80,4 +83,50 @@ test("documents use the wording the PDFs support", () => {
   const titles = documents.map(([title]) => title).join(" | ");
   assert.doesNotMatch(titles, /aprobado/i);
   assert.match(titles, /Contrato de adhesión registrado ante Profeco/);
+});
+
+test("client portal URL", () => {
+  assert.equal(PORTAL_URL, "https://clientes.redixc.net/");
+});
+
+test("holder name accepts real names and normalizes spacing", () => {
+  for (const [raw, name] of [
+    ["  María   José  Peña ", "María José Peña"],
+    ["José Ángel O'Connor", "José Ángel O'Connor"],
+    ["Ana-Luisa Ruíz Jr.", "Ana-Luisa Ruíz Jr."],
+    ["Ma. Guadalupe", "Ma. Guadalupe"],
+    ["Ñañez\nLópez", "Ñañez López"],
+  ]) {
+    assert.deepEqual(validateHolderName(raw), { name, error: null }, raw);
+  }
+});
+
+test("holder name rejects markup, scripts and other characters", () => {
+  for (const raw of [
+    "",
+    "   ",
+    "Al",
+    "<script>alert(1)</script>",
+    "Juan <b>",
+    'Juan" onmouseover="x',
+    "javascript:alert(1)",
+    "Juan & Ana",
+    "Juan 123",
+    "Juan 😀",
+    "Juan%0aHola",
+    "Juan/Ana",
+    "-Juan",
+    "a".repeat(81),
+  ]) {
+    assert.ok(validateHolderName(raw).error, JSON.stringify(raw));
+  }
+});
+
+test("Administración WhatsApp link carries the encoded holder name", () => {
+  const url = new URL(adminWhatsappUrl("María Peña"));
+  assert.equal(url.origin + url.pathname, "https://wa.me/523338454848");
+  assert.equal(
+    url.searchParams.get("text"),
+    "Hola, Administración de Redixc. No conozco mi usuario o contraseña del portal de clientes. El servicio está a nombre de María Peña. ¿Me pueden ayudar?",
+  );
 });

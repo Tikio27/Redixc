@@ -89,6 +89,39 @@ export const documents = [
 export const IFT_VISOR_URL = "https://tarifas.ift.org.mx/ift_visor/";
 // Ubicación de la oficina proporcionada por Redixc (19/10/2026).
 export const MAPS_URL = "https://maps.app.goo.gl/N9wUGfgTxWjugjJT7";
+// Portal de clientes de la plataforma de administración (estados de cuenta,
+// facturas, pagos y tickets). Se abre en una pestaña nueva.
+export const PORTAL_URL = "https://clientes.redixc.net/";
+// Administración (33 3845 4848) atiende dudas de usuario o contraseña del
+// portal por WhatsApp; el número no se muestra en el sitio.
+export const ADMIN_WHATSAPP = "523338454848";
+export const HOLDER_NAME_MAX = 80;
+
+// Nombre del titular: solo letras (con acentos y ñ), espacios, punto,
+// apóstrofo y guion. Cualquier otro carácter (<, >, /, comillas, dígitos,
+// emojis, saltos de línea…) se rechaza en lugar de limpiarse en silencio.
+const HOLDER_NAME = /^\p{L}[\p{L}\p{M}]*(?:[ '’.-]+[\p{L}\p{M}]+)*\.?$/u;
+
+export function validateHolderName(raw) {
+  const name = String(raw ?? "").normalize("NFC").replace(/\s+/g, " ").trim();
+  if (!name) return { name, error: "Escribe el nombre del titular del servicio." };
+  if (name.length > HOLDER_NAME_MAX)
+    return { name, error: `Usa como máximo ${HOLDER_NAME_MAX} caracteres.` };
+  if (!HOLDER_NAME.test(name) || (name.match(/\p{L}/gu) || []).length < 3)
+    return {
+      name,
+      error: "Usa solo letras y espacios, como aparece en tu contrato.",
+    };
+  return { name, error: null };
+}
+
+export function adminWhatsappMessage(name) {
+  return `Hola, Administración de Redixc. No conozco mi usuario o contraseña del portal de clientes. El servicio está a nombre de ${name}. ¿Me pueden ayudar?`;
+}
+
+export function adminWhatsappUrl(name) {
+  return `https://wa.me/${ADMIN_WHATSAPP}?text=${encodeURIComponent(adminWhatsappMessage(name))}`;
+}
 export const ADDRESS =
   "Rafael Mejía Amaral #55, El Botadero, Santiago Ixcuintla, Nayarit, C.P. 63575";
 // Publicación de Águilas del Botadero con la foto del mural de Redixc.

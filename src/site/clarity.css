@@ -939,3 +939,190 @@
   font-weight: 400;
   letter-spacing: 0;
 }
+
+/* Portal de clientes (clientes.redixc.net): acceso en la navegación y en Ayuda.
+   Se abre en una pestaña nueva; el portal gestiona el inicio de sesión. */
+:root {
+  --danger: #b42318;
+}
+:root[data-theme="dark"] {
+  --danger: #fda29b;
+}
+.hybrid .desktop-nav .nav-portal {
+  gap: 6px;
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.hybrid .desktop-nav .nav-portal svg {
+  flex: none;
+}
+.hybrid .help-options .help-portal {
+  grid-column: 1 / -1;
+}
+.hybrid .help-options .help-portal > .button {
+  margin-top: 0;
+}
+.hybrid .help-portal-note {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+.hybrid .help-portal-form {
+  width: 100%;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.hybrid .help-portal-form .help-portal-note {
+  margin: 0 0 14px;
+  max-width: 62ch;
+}
+.hybrid .help-portal-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.hybrid .help-portal-row {
+  max-width: 680px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hybrid .help-portal-row input {
+  flex: 1 1 260px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.hybrid .help-portal-row input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.hybrid .help-portal-row input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+.hybrid .help-portal-row .button {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+.hybrid .help-portal-error {
+  min-height: 1.5em;
+  margin: 8px 0 0;
+  color: var(--danger);
+  font-size: 14px;
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  .hybrid .help-portal-row .button {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+@media (max-width: 1100px) and (min-width: 851px) {
+  .hybrid .desktop-nav .nav-portal {
+    padding-left: 15px;
+  }
+}
+/* Móvil y tableta (sin navegación de escritorio): enlace visible en la cabecera,
+   con el mismo tratamiento que en escritorio (icono y texto en acento, sin caja).
+   En teléfonos WhatsApp queda solo con su icono para dejarle espacio. */
+.hybrid .header .header-portal {
+  display: none;
+}
+@media (max-width: 850px) {
+  .hybrid .header .header-portal {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 4px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .hybrid .header .header-portal svg {
+    flex: none;
+  }
+  .hybrid .header .header-portal:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+@media (max-width: 600px) {
+  .app.hybrid.header-compact .header .whatsapp-nav > span {
+    display: none;
+  }
+  .app.hybrid.header-compact .header .whatsapp-nav {
+    justify-content: center;
+    width: 44px;
+    padding: 0;
+  }
+  .app.hybrid.header-compact .header .whatsapp-nav svg {
+    margin: 0;
+  }
+}
+/* En teléfonos el icono cede su espacio al logo. */
+@media (max-width: 430px) {
+  .hybrid .header .header-portal svg {
+    display: none;
+  }
+}
+@media (max-width: 345px) {
+  .hybrid .header .header-portal {
+    padding: 0;
+    font-size: 13px;
+  }
+}
+/* Justo encima del menú móvil no caben el icono ni la separación completa. */
+@media (max-width: 920px) and (min-width: 851px) {
+  .hybrid .desktop-nav {
+    gap: 12px;
+  }
+  .hybrid .desktop-nav .nav-portal {
+    padding-left: 12px;
+  }
+  .hybrid .desktop-nav .nav-portal svg {
+    display: none;
+  }
+}
+
+/* Logo: 150 px en escritorio y tableta; en anchos menores ocupa todo el espacio
+   que deja la cabecera (se encoge solo él, sin desbordar ni partir enlaces). */
+.app.hybrid .header .brand {
+  flex: 0 1 150px;
+  width: auto;
+  min-width: 0;
+  max-width: 150px;
+}
+.app.hybrid .header .desktop-nav,
+.app.hybrid .header .header-actions {
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .app.hybrid .header .brand {
+    margin-right: 10px;
+  }
+}
+
+/* Planes: el recomendador plegado abre la sección (va antes del catálogo).
+   Sin su margen superior ni el padding de la sección, el espacio bajo la foto es
+   el mismo que en Ayuda, Legal y Cobertura (32 px en móvil, 44 en escritorio). */
+.hybrid .section > .recommender-disclosure:first-child {
+  margin-top: 0;
+}
+.app.hybrid.page-planes .page-intro + .section {
+  padding-top: 0;
+}

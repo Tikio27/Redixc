@@ -364,3 +364,25 @@
     font-size: 112px;
   }
 }
+
+/* Introducción en las mismas dos columnas que la historia: título a la
+   izquierda y texto alineado con la columna de capítulos, sin hueco a la derecha.
+   En una columna (móvil, movimiento reducido, ventanas bajas) queda como antes. */
+@media (min-width: 701px) and (min-height: 701px) and (prefers-reduced-motion: no-preference) {
+  .community-intro {
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 80px;
+    align-items: end;
+  }
+  .community-intro > p {
+    margin-top: 0;
+    max-width: 560px;
+  }
+}
+@media (min-width: 701px) and (max-width: 1000px) and (min-height: 701px) and (prefers-reduced-motion: no-preference) {
+  .community-intro {
+    gap: 40px;
+  }
+}
