@@ -167,12 +167,7 @@ export function CommunityStory() {
       aria-labelledby="community-title"
     >
       <header className="community-intro">
-        <span className="eyebrow">NUESTRO SERVICIO A LA COMUNIDAD</span>
-        <h2 id="community-title">
-          Somos de aquí.
-          <br />
-          <em>Y aquí nos involucramos.</em>
-        </h2>
+        <h2 id="community-title">Nuestro servicio a la comunidad</h2>
         <p>
           Conectar también significa estar presentes: en la escuela, en los
           espacios compartidos y en lo que nos reúne como comunidad.
@@ -192,9 +187,6 @@ export function CommunityStory() {
             ))}
           </div>
           <div className="community-progress">
-            <span>
-              0{active + 1} / {String(chapters.length).padStart(2, "0")}
-            </span>
             <span>{chapters[active].label}</span>
           </div>
         </aside>
@@ -205,10 +197,7 @@ export function CommunityStory() {
               key={chapter.id}
               onFocusCapture={() => setActive(index)}
             >
-              <span className="community-chapter-label">
-                <span>0{index + 1}</span>
-                {chapter.label}
-              </span>
+              <span className="community-chapter-label">{chapter.label}</span>
               <h3>{chapter.title}</h3>
               <p>{chapter.body}</p>
               {chapter.note && <p className="community-note">{chapter.note}</p>}

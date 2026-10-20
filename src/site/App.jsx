@@ -26,6 +26,7 @@ import {
   IFT_VISOR_URL,
   ADDRESS,
   MAPS_URL,
+  MURAL_SOURCE_URL,
 } from "./plans";
 import {
   ArrowRight,
@@ -39,7 +40,6 @@ import {
   List,
   X,
   Check,
-  DownloadSimple,
   UploadSimple,
   Laptop,
   GraduationCap,
@@ -130,6 +130,7 @@ function App() {
   const [menu, setMenu] = useState(false);
   const [contact, setContact] = useState(null);
   const [recommended, setRecommended] = useState(null);
+  const [openPlanDetails, setOpenPlanDetails] = useState([]);
   const dark = theme === "dark" || (theme === "system" && systemDark);
   const family = true;
   useEffect(() => {
@@ -254,74 +255,113 @@ function App() {
       });
     } else setContact(next);
   };
-  const planCard = (p, full = false) => (
-    <article
-      className={`plan ${recommended === p.name ? "recommended" : ""}`}
-      key={p.name}
-      data-plan={p.name}
-    >
-      {
-        <div className="plan-top">
-          <span className="eyebrow">{p.name}</span>
-          {recommended === p.name && (
-            <span className="recommend-label">
-              <Check size={12} /> Tu recomendación
-            </span>
-          )}
-        </div>
-      }
-      <h3>
-        <span>{p.down}</span> <small>Mbps</small>
-      </h3>
-      <p className="plan-price">
-        ${p.price}
-        <span> / mes</span>
+  // One plan card for every page, fed by plans.js. Both variants share the
+  // head (name and download speed left, price right). Summary cards (Inicio,
+  // Cobertura) follow with upload, description and button; the full card
+  // (Planes) with description, upload, button and its documents. On phones
+  // the full card folds description, use and documents into «Detalles del
+  // plan»: the description is rendered in both places and CSS shows one, so
+  // the DOM order always matches what is on screen.
+  const planCard = (p, full = false) => {
+    const detailsOpen = openPlanDetails.includes(p.name);
+    const detailsId = `plan-detalles-${p.ift}`;
+    const isRecommended = recommended === p.name;
+    const summary = (
+      <>
+        <p className="plan-description">{p.desc}</p>
+        {full && <p className="plan-use">{p.use}</p>}
+      </>
+    );
+    const upload = (
+      <p className={full ? "plan-up" : "plan-up preview-upload"}>
+        {full && <UploadSimple size={16} aria-hidden="true" />}
+        {p.up} Mbps de subida
       </p>
-      <p className="plan-description">
-        {full
-          ? p.desc
-          : {
-              30: "Ideal para navegar, redes sociales y tareas del día a día.",
-              50: "Para estudiar, trabajar y ver contenido en línea.",
-              100: "Para streaming y varios dispositivos.",
-            }[p.down]}
-      </p>
-      {full && (
-        <>
-          <div className="speed-details">
-            <span>
-              <DownloadSimple size={16} />
-              {p.down} Mbps de bajada
-            </span>
-            <span>
-              <UploadSimple size={16} />
-              {p.up} Mbps de subida
-            </span>
+    );
+    const buttonLabel = full ? "Consultar este plan" : "Consultar plan";
+    return (
+      <article
+        className={`plan ${isRecommended ? "recommended" : ""} ${detailsOpen ? "details-open" : ""}`}
+        key={p.name}
+        data-plan={p.name}
+      >
+        {isRecommended && (
+          <p className="recommend-label">
+            <Check size={14} aria-hidden="true" /> Tu recomendación
+          </p>
+        )}
+        <div className="plan-head">
+          <div className="plan-head-main">
+            <div className="plan-top">
+              <span className="eyebrow">{p.name}</span>
+            </div>
+            <h3>
+              <span>{p.down}</span> <small>Mbps</small>{" "}
+              <small className="plan-down-label">de bajada</small>
+            </h3>
           </div>
-          <p className="plan-use">{p.use}</p>
-        </>
-      )}
-      {!full && <p className="preview-upload">{p.up} Mbps de subida</p>}
-      {
-        <button className="button plan-button" onClick={() => openContact(p)}>
-          Consultar este plan <ArrowRight size={17} />
-        </button>
-      }
-      {full && (
-        <div className="plan-foot">
-          <a
-            href={formatoUrl(p)}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Formato simplificado de ${p.name}`}
-          >
-            Ficha del plan <ArrowUpRight size={13} />
-          </a>
-          <span className="plan-ift">Número de inscripción IFT: {p.ift}</span>
+          <p className="plan-price">
+            ${p.price}
+            <small className="plan-unit">MXN / mes</small>
+            {full && <small className="plan-tax">Impuestos incluidos</small>}
+          </p>
         </div>
-      )}
-    </article>
-  );
+        {full ? (
+          <>
+            <div className="plan-summary">{summary}</div>
+            {upload}
+          </>
+        ) : (
+          <>
+            {upload}
+            {summary}
+          </>
+        )}
+        <button
+          className="button plan-button"
+          aria-label={`${buttonLabel} ${p.name}`}
+          onClick={() => openContact(p)}
+        >
+          {buttonLabel} <ArrowRight size={17} aria-hidden="true" />
+        </button>
+        {full && (
+          <>
+            <button
+              type="button"
+              className="plan-details-toggle"
+              aria-expanded={detailsOpen}
+              aria-controls={detailsId}
+              aria-label={`Detalles del plan ${p.name}`}
+              onClick={() =>
+                setOpenPlanDetails((open) =>
+                  open.includes(p.name)
+                    ? open.filter((name) => name !== p.name)
+                    : [...open, p.name],
+                )
+              }
+            >
+              Detalles del plan
+              <CaretDown size={16} aria-hidden="true" />
+            </button>
+            <div className="plan-details" id={detailsId}>
+              <div className="plan-details-summary">{summary}</div>
+              <div className="plan-foot">
+                <a
+                  href={formatoUrl(p)}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`Formato de información simplificada de ${p.name}`}
+                >
+                  Ficha del plan <ArrowUpRight size={13} />
+                </a>
+                <span className="plan-ift">Folio de inscripción: {p.ift}</span>
+              </div>
+            </div>
+          </>
+        )}
+      </article>
+    );
+  };
   const hero = (
     <section className={`hero shell ${family ? "hero-family" : "hero-fiber"}`}>
       {!family && (
@@ -329,6 +369,19 @@ function App() {
           <img
             src={`/assets/fiber-faithful-${dark ? "dark" : "light"}.webp`}
             alt="Filamentos de fibra óptica iluminados en azul"
+          />
+        </picture>
+      )}
+      {family && (
+        // Phones show the approved photo before the copy; DOM order matches
+        // the visual order, and only one of the two hero images is rendered.
+        <picture className="family-visual-mobile">
+          <img
+            src="/assets/hero-planes.webp"
+            alt="Familia compartiendo un momento con una laptop en casa"
+            width="1200"
+            height="800"
+            fetchpriority="high"
           />
         </picture>
       )}
@@ -483,7 +536,7 @@ function App() {
             <section className="section shell home-plans" id="home-plans">
               <div className="section-heading centered">
                 <h2>Nuestros planes de internet</h2>
-                <p>Conecta lo que más te importa.</p>
+                <p>Precios en MXN al mes, con impuestos incluidos.</p>
               </div>
               <div className={`plans-grid preview-plans`}>
                 {[plans[0], plans[2], plans[4]].map((p) =>
@@ -491,7 +544,6 @@ function App() {
                 )}
               </div>
               <div className="plans-note">
-                <p>Precios en MXN al mes, con impuestos incluidos.</p>
                 <Link className="text-link" to={href("planes")}>
                   Ver los 6 planes <ArrowRight size={18} />
                 </Link>
@@ -526,8 +578,11 @@ function App() {
               aria-labelledby="steps-title"
             >
               <div className="section-heading centered">
-                <h2 id="steps-title">Tu conexión, paso a paso</h2>
-                <p>Así de fácil es llevar internet a tu casa.</p>
+                <h2 id="steps-title">Cómo contratar</h2>
+                <p>
+                  Primero revisamos la cobertura de tu domicilio; después eliges
+                  plan y acordamos la instalación.
+                </p>
               </div>
               <ol className="connection-step-grid">
                 {[
@@ -584,83 +639,121 @@ function App() {
                 con nuestro equipo.
               </p>
             </section>
-            <section className="home-clarity" aria-labelledby="clarity-title">
-              <picture className="clarity-photo">
-                <img
-                  src={`/assets/study-home-v5-${dark ? "dark" : "light"}.webp`}
-                  alt="Niña estudiando con su cuaderno y una laptop en un hogar de su comunidad"
-                  loading="lazy"
-                />
-              </picture>
-              <div className="shell clarity-inner">
-                <div className="clarity-copy">
-                  <h2 id="clarity-title">
-                    Todo claro,
-                    <br />
-                    desde el principio.
-                  </h2>
-                  <ul>
-                    {[
-                      [Wifi, "Velocidades de subida y bajada a la vista."],
-                      [Tag, "Precios con impuestos incluidos."],
-                      [FileText, "Documentos del servicio disponibles."],
-                    ].map(([Icon, text]) => (
-                      <li key={text}>
-                        <Icon size={32} weight="light" />
-                        <span>{text}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="hero-buttons">
-                    <Link className="button" to={href("planes")}>
-                      Comparar planes <ArrowRight size={18} />
-                    </Link>
-                    <Link className="button secondary" to={href("legal")}>
-                      Consultar documentos
-                    </Link>
-                  </div>
+            <section
+              className="home-written shell"
+              aria-labelledby="written-title"
+            >
+              <h2 id="written-title">Lo que contratas, por escrito</h2>
+              <div className="home-written-body">
+                {/* Names as they appear in the published documents. */}
+                <ul>
+                  {[
+                    [
+                      Tag,
+                      "Precio con impuestos incluidos y velocidad de bajada y subida de cada plan.",
+                    ],
+                    [
+                      FileText,
+                      "Formato de información simplificada y folio de inscripción de cada tarifa.",
+                    ],
+                    [
+                      ShieldCheck,
+                      "Contrato de adhesión registrado ante Profeco y Carta de derechos mínimos de los usuarios.",
+                    ],
+                  ].map(([Icon, text]) => (
+                    <li key={text}>
+                      <Icon size={28} weight="light" aria-hidden="true" />
+                      <span>{text}</span>
+                    </li>
+                  ))}
+                </ul>
+                <div className="hero-buttons">
+                  <Link className="button" to={href("planes")}>
+                    Comparar planes <ArrowRight size={18} />
+                  </Link>
+                  <Link className="button secondary" to={href("legal")}>
+                    Consultar documentos
+                  </Link>
                 </div>
               </div>
             </section>
             <section
-              className="home-help shell"
-              aria-labelledby="home-help-title"
+              className="home-attention shell"
+              aria-labelledby="attention-title"
             >
-              <div className="home-help-copy">
-                <h2 id="home-help-title">
-                  Estamos cerca
-                  <br />
-                  para ayudarte.
-                </h2>
-                <p>Resolvemos tus dudas por teléfono o WhatsApp.</p>
-                <a className="home-help-phone" href="tel:+523111447676">
-                  <Phone size={30} weight="light" />
-                  311 144 7676
-                </a>
-                <button
-                  className="button whatsapp-button"
-                  onClick={() => openContact()}
-                >
-                  <WhatsappLogo size={26} />
-                  WhatsApp
-                </button>
-              </div>
-              <div className="home-help-faq">
-                <h3>Preguntas frecuentes</h3>
-                <Faq
-                  items={[
-                    [
-                      "¿Cómo puedo saber si hay cobertura en mi domicilio?",
-                      faqs[0][1],
-                    ],
-                    faqs[2],
-                    [
-                      "¿Qué tipo de soporte ofrecen?",
-                      "Te atienden técnicos locales. Contacta al equipo por teléfono o WhatsApp al 311 144 7676 y comparte tu nombre, localidad y una descripción de lo que ocurre.",
-                    ],
-                  ]}
+              <figure>
+                <img
+                  src="/assets/community/aguilas-redixc.jpg"
+                  alt="Mural azul de Redixc con el teléfono 311 144 7676 en el espacio deportivo de El Botadero"
+                  loading="lazy"
+                  width="1280"
+                  height="960"
                 />
+                <figcaption>
+                  Mural de Redixc en el espacio deportivo de El Botadero · Foto:{" "}
+                  <a href={MURAL_SOURCE_URL} target="_blank" rel="noreferrer">
+                    Águilas del Botadero
+                  </a>
+                </figcaption>
+              </figure>
+              <div className="home-attention-copy">
+                <h2 id="attention-title">
+                  Atención por teléfono, WhatsApp o en persona
+                </h2>
+                <p>Elige tu localidad para preparar tu consulta por WhatsApp.</p>
+                <div className="locality-list">
+                  {locales.map((l) => (
+                    <button key={l} onClick={() => openContact(null, l)}>
+                      <MapPin size={20} aria-hidden="true" />
+                      {l}
+                      <ArrowRight size={18} aria-hidden="true" />
+                    </button>
+                  ))}
+                </div>
+                <p className="coverage-disclaimer">
+                  <ShieldCheck size={18} aria-hidden="true" />
+                  Seleccionar una localidad no confirma cobertura: la revisamos
+                  para tu domicilio.
+                </p>
+                <div className="home-attention-contact">
+                  <a className="home-help-phone" href="tel:+523111447676">
+                    <Phone size={26} weight="light" aria-hidden="true" />
+                    311 144 7676
+                  </a>
+                  <address>
+                    <MapPin size={20} aria-hidden="true" />
+                    <span>
+                      Punto de atención: {ADDRESS}
+                    </span>
+                  </address>
+                  <a
+                    className="button secondary"
+                    href={MAPS_URL}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Cómo llegar <ArrowUpRight size={17} />
+                  </a>
+                </div>
               </div>
+            </section>
+            <section className="section shell faq-section home-faq">
+              <div className="section-heading">
+                <h2>Preguntas frecuentes</h2>
+              </div>
+              <Faq
+                items={[
+                  [
+                    "¿Cómo puedo saber si hay cobertura en mi domicilio?",
+                    faqs[0][1],
+                  ],
+                  faqs[2],
+                  [
+                    "¿Qué tipo de soporte ofrecen?",
+                    "Te atienden técnicos locales. Contacta al equipo por teléfono o WhatsApp al 311 144 7676 y comparte tu nombre, localidad y una descripción de lo que ocurre.",
+                  ],
+                ]}
+              />
             </section>
           </>
         )}
@@ -668,31 +761,10 @@ function App() {
           <>
             <PageIntro
               page={route.page}
-              tag="TU CONEXIÓN, A TU MEDIDA"
-              title={
-                <>
-                  Elige cómo quieres
-                  <br />
-                  <em>conectarte.</em>
-                </>
-              }
+              title="Planes de internet"
               text="Desde $300 MXN al mes, con impuestos incluidos. Compara velocidades y consulta la disponibilidad para tu domicilio."
             />
             <section className="section shell" id="todos-planes">
-              <div className="plan-filter-row">
-                <h2>Todos nuestros planes</h2>
-              </div>
-              <div className="plans-grid all-plans">
-                {plans.map((p) => planCard(p, true))}
-              </div>
-              <p className="fineprint">
-                Precios mensuales en MXN, con impuestos incluidos. Consulta las
-                condiciones de instalación y disponibilidad antes de contratar.
-                Para mayor información respecto a las tarifas puede consultar el{" "}
-                <a href={IFT_VISOR_URL} target="_blank" rel="noreferrer">
-                  visor de tarifas de la Comisión Reguladora de Telecomunicaciones
-                </a>.
-              </p>
               <details className="recommender-disclosure">
                 <summary>
                   ¿No sabes cuál elegir? Te ayudamos a orientarte
@@ -707,6 +779,20 @@ function App() {
                   }}
                 />
               </details>
+              <div className="plan-filter-row">
+                <h2>Compara los 6 planes</h2>
+              </div>
+              <div className="plans-grid all-plans">
+                {plans.map((p) => planCard(p, true))}
+              </div>
+              <p className="fineprint">
+                Precios mensuales en MXN, con impuestos incluidos. Consulta las
+                condiciones de instalación y disponibilidad antes de contratar.
+                Para mayor información respecto a las tarifas puede consultar el{" "}
+                <a href={IFT_VISOR_URL} target="_blank" rel="noreferrer">
+                  visor de tarifas de la Comisión Reguladora de Telecomunicaciones
+                </a>.
+              </p>
               <PlanTable openContact={openContact} />
               <div className="benefits-line">
                 <span>
@@ -730,14 +816,7 @@ function App() {
           <>
             <PageIntro
               page={route.page}
-              tag="EMPECEMOS POR TU LOCALIDAD"
-              title={
-                <>
-                  Más cerca de
-                  <br />
-                  <em>tu próxima conexión.</em>
-                </>
-              }
+              title="Cobertura por localidad"
               text="Cuéntanos dónde necesitas internet. Nuestro equipo confirmará la disponibilidad para tu domicilio."
             />
             <section className="shell coverage-page">
@@ -767,7 +846,6 @@ function App() {
                 </p>
               </div>
               <aside className="coverage-info" aria-labelledby="steps-coverage">
-                <span className="eyebrow">SANTIAGO IXCUINTLA Y LOCALIDADES</span>
                 <h2 id="steps-coverage">Así confirmamos tu cobertura</h2>
                 <ol className="coverage-steps">
                   {[
@@ -815,18 +893,13 @@ function App() {
                 />
                 <figcaption>
                   Mural de Redixc en el espacio deportivo de El Botadero · Foto:{" "}
-                  <a
-                    href="https://www.facebook.com/aguilas.del.botadero.2025/posts/pfbid0AwHRWbcMVPo5qNa5R4K4oz4yruQnxZCZKQasSkyaVQbowFCwzbP2p7ABtB1mZk83l"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href={MURAL_SOURCE_URL} target="_blank" rel="noreferrer">
                     Águilas del Botadero
                   </a>
                 </figcaption>
               </figure>
               <div className="coverage-office-copy">
-                <span className="eyebrow">ATENCIÓN LOCAL</span>
-                <h2 id="office-title">Estamos en El Botadero</h2>
+                <h2 id="office-title">Nuestro punto de atención</h2>
                 <p>
                   Te atienden técnicos locales, de tu comunidad. Escríbenos,
                   llámanos o visítanos.
@@ -874,8 +947,7 @@ function App() {
             </section>
             <section className="section shell faq-section">
               <div className="section-heading">
-                <span className="eyebrow">PREGUNTAS FRECUENTES</span>
-                <h2>Sobre la cobertura</h2>
+                <h2>Preguntas sobre cobertura</h2>
               </div>
               <Faq items={[faqs[0], faqs[2], faqs[5]]} />
             </section>
@@ -885,47 +957,10 @@ function App() {
           <>
             <PageIntro
               page={route.page}
-              tag="LA FIBRA QUE TE UNE AL MUNDO"
-              title={
-                <>
-                  De aquí.
-                  <br />
-                  <em>Para estar más cerca.</em>
-                </>
-              }
+              title="La fibra que te une al mundo."
               text="Más de diez años proporcionando internet en nuestra región. Antes como Botanet, hoy como Redixc: la misma empresa, cerca de nuestras comunidades."
             />
             <CommunityStory />
-            <section
-              className="section shell values-grid"
-              aria-label="Nuestra forma de trabajar"
-            >
-              {[
-                [
-                  Users,
-                  "Cercanía",
-                  "Escuchamos lo que necesitas y te orientamos para elegir.",
-                ],
-                [
-                  FileText,
-                  "Claridad",
-                  "Precios, características y documentos fáciles de encontrar.",
-                ],
-                [
-                  Wifi,
-                  "Conexión",
-                  "Fibra óptica para las actividades de tu hogar o negocio.",
-                ],
-              ].map(([Icon, title, desc]) => (
-                <article key={title}>
-                  <span className="value-icon" aria-hidden="true">
-                    <Icon size={30} weight="light" />
-                  </span>
-                  <h3>{title}</h3>
-                  <p>{desc}</p>
-                </article>
-              ))}
-            </section>
             <ContactBanner openContact={openContact} />
           </>
         )}
@@ -933,15 +968,8 @@ function App() {
           <>
             <PageIntro
               page={route.page}
-              tag="PERSONAS PARA AYUDARTE"
-              title={
-                <>
-                  Hablemos.
-                  <br />
-                  <em>Estamos cerca.</em>
-                </>
-              }
-              text="¿Buscas internet o necesitas ayuda con tu servicio? Encuentra el camino más sencillo."
+              title="¿En qué te ayudamos?"
+              text="Llámanos al 311 144 7676 o escríbenos por WhatsApp para contratar o recibir ayuda con tu servicio."
             />
             <section className="shell help-options">
               <article>
@@ -980,8 +1008,7 @@ function App() {
             </section>
             <section className="section shell faq-section">
               <div className="section-heading">
-                <span className="eyebrow">PREGUNTAS FRECUENTES</span>
-                <h2>Respuestas claras.</h2>
+                <h2>Preguntas frecuentes</h2>
                 <p>
                   También puedes llamarnos al{" "}
                   <a href="tel:+523111447676">311 144 7676</a> o escribir a{" "}
@@ -1000,14 +1027,7 @@ function App() {
           <>
             <PageIntro
               page={route.page}
-              tag="TRANSPARENCIA"
-              title={
-                <>
-                  Tu información.
-                  <br />
-                  <em>Siempre a la vista.</em>
-                </>
-              }
+              title="Contratos y documentos"
               text="Consulta los documentos del servicio, tus derechos y las características de los paquetes."
             />
             <section className="shell documents">
@@ -1232,10 +1252,7 @@ function Recommender({
       <div className="recommender-header">
         <div>
           {!inDisclosure && (
-            <>
-              <span className="eyebrow">ENCUENTRA TU CONEXIÓN</span>
-              <h2>¿No sabes cuál elegir?</h2>
-            </>
+            <h2>¿No sabes cuál elegir?</h2>
           )}
           <p>
             Selecciona tus actividades y cuántas personas se conectan a la vez.
@@ -1320,7 +1337,7 @@ function Recommender({
           {shown && (
             <div className="recommend-result">
               <div>
-                <span className="eyebrow">UNA OPCIÓN PARA TI</span>
+                <span className="recommend-kicker">Sugerencia orientativa</span>
                 <h3>
                   {shown.name} · {shown.down} Mbps{" "}
                   <span>${shown.price}/mes</span>
@@ -1350,7 +1367,7 @@ function Recommender({
 const heroImages = { planes: "/assets/hero-planes-eleccion.webp" };
 const heroAlts = {
   planes: "Una señora y su hijo eligen un plan de internet en la laptop, en casa",
-  cobertura: "Técnico conversando con una residente frente a su hogar",
+  cobertura: "Familia revisando un teléfono en el porche de su casa",
   nosotros: "Personas de la comunidad conectándose desde casa",
   ayuda: "Atención cercana para resolver dudas sobre internet",
   legal: "Consulta de un contrato junto a una laptop",
@@ -1359,7 +1376,7 @@ function PageIntro({ page, tag, title, text }) {
   return (
     <section className="page-intro shell">
       <div className="page-intro-copy">
-        <span className="eyebrow">{tag}</span>
+        {tag && <span className="eyebrow">{tag}</span>}
         <h1>{title}</h1>
         <p>{text}</p>
       </div>
@@ -1391,15 +1408,8 @@ function ContactBanner({ openContact }) {
   return (
     <section className="contact-banner shell">
       <div>
-        <span className="eyebrow">
-          LA MEJOR CONEXIÓN EMPIEZA CON UNA CONVERSACIÓN
-        </span>
-        <h2>
-          Tu próxima conexión
-          <br />
-          empieza aquí.
-        </h2>
-        <p>Te ayudamos a elegir y resolvemos tus dudas.</p>
+        <h2>¿Dudas antes de contratar?</h2>
+        <p>Escríbenos por WhatsApp: te ayudamos a elegir y resolvemos tus dudas.</p>
       </div>
       <button className="button" onClick={() => openContact()}>
         <WhatsappLogo size={24} /> Hablemos por WhatsApp{" "}

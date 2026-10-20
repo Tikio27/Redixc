@@ -61,3 +61,23 @@ test("published contact data and localities are unchanged", () => {
   ]);
   assert.equal(documents.length, 5);
 });
+
+test("every plan carries the single description and use shown on all pages", () => {
+  for (const p of plans) {
+    assert.ok(p.desc && p.desc.endsWith("."), `${p.name} desc`);
+    assert.ok(p.use, `${p.name} use`);
+  }
+});
+
+test("Plus keeps the approved description", () => {
+  assert.equal(
+    plans.find((p) => p.name === "Plus").desc,
+    "Para estudiar, trabajar y ver contenido en línea.",
+  );
+});
+
+test("documents use the wording the PDFs support", () => {
+  const titles = documents.map(([title]) => title).join(" | ");
+  assert.doesNotMatch(titles, /aprobado/i);
+  assert.match(titles, /Contrato de adhesión registrado ante Profeco/);
+});

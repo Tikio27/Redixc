@@ -23,7 +23,7 @@ export const plans = [
     down: 50,
     up: 40,
     price: 400,
-    desc: "Más espacio para trabajar, estudiar y disfrutar.",
+    desc: "Para estudiar, trabajar y ver contenido en línea.",
     use: "Trabajo y entretenimiento en casa",
   },
   {
@@ -66,9 +66,11 @@ export const documents = [
     "Consulta el documento de concesión.",
     "TituloDeConcesion.pdf",
   ],
+  // El PDF es el oficio de registro de Profeco con el contrato anexo
+  // («contrato de adhesión registrado», no «aprobado»).
   [
-    "Contrato aprobado por Profeco",
-    "Registro del contrato de adhesión.",
+    "Contrato de adhesión registrado ante Profeco",
+    "Oficio de registro y contrato de adhesión.",
     "Contrato_Adhesion_aprobado_por_Profeco.pdf",
   ],
   [
@@ -89,6 +91,9 @@ export const IFT_VISOR_URL = "https://tarifas.ift.org.mx/ift_visor/";
 export const MAPS_URL = "https://maps.app.goo.gl/N9wUGfgTxWjugjJT7";
 export const ADDRESS =
   "Rafael Mejía Amaral #55, El Botadero, Santiago Ixcuintla, Nayarit, C.P. 63575";
+// Publicación de Águilas del Botadero con la foto del mural de Redixc.
+export const MURAL_SOURCE_URL =
+  "https://www.facebook.com/aguilas.del.botadero.2025/posts/pfbid0AwHRWbcMVPo5qNa5R4K4oz4yruQnxZCZKQasSkyaVQbowFCwzbP2p7ABtB1mZk83l";
 
 export const formatoUrl = (plan) =>
   `/docs/formatos/FormatoSimplificado_${plan.ift}.pdf`;

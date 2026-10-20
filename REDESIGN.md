@@ -63,3 +63,36 @@ Datos de planes en `src/site/plans.js`. Pruebas: `npm test` (unitarias) y, con `
 Pendiente de validar con el negocio: cobertura en la cabecera municipal, fórmula del recomendador, costo de instalación y horarios.
 
 Eslogan oficial confirmado por el usuario el 19/10/2026: «La fibra que te une al mundo.» (redixc.net aún muestra «te conecta al mundo»).
+
+## Fase 1 de la auditoría Taste (19/10/2026, sin publicar)
+
+Ajustes aprobados tras la auditoría con tasteskill v2. Conservan el hero aprobado, la marca, el menú sticky y el diálogo de WhatsApp.
+
+- Hero de Inicio en móvil: la misma foto aprobada (`hero-planes.webp`) va antes del texto, en 16:10 (recorta solo techo y mantel; caras, laptop y taza se conservan) y con menos espacio hasta la etiqueta y el titular. El orden del DOM coincide con el visual; tablet y escritorio no cambian.
+- Tarjeta de plan única (`planCard`), alimentada por `plans.js` (una descripción por plan). Cabecera común: nombre y bajada («de bajada») a la izquierda; precio y «MXN / mes» a la derecha, con flex-wrap para apilarse si no cabe (tablet o texto ampliado).
+  - Resumida (Inicio y Cobertura): después, subida, descripción y «Consultar plan» (nombre accesible «Consultar plan Plus», etc.) a todo el ancho.
+  - Completa (Planes, escritorio): impuestos incluidos, descripción y uso, subida, «Consultar este plan» (alineado entre tarjetas), ficha y folio. La bajada aparece una sola vez.
+  - Completa (Planes, móvil): a la vista nombre, bajada, subida, precio con impuestos y botón; «Detalles del plan» (`aria-expanded`/`aria-controls`) despliega descripción, uso, ficha y folio. La descripción existe en ambos sitios del DOM y el CSS muestra uno, para que el orden del DOM coincida con el visual. La tabla se oculta en móvil porque repetía esos datos; en escritorio se mantiene.
+  - El plan sugerido por el recomendador lleva la etiqueta «Tu recomendación»; al desplazarse hacia él queda entero bajo la cabecera sticky y el desplazamiento es instantáneo (sin animación).
+- Descripción del Plus: «Para estudiar, trabajar y ver contenido en línea.»
+- Planes: el recomendador plegado va antes del catálogo.
+- Corregidos: precio centrado (Inicio) o a la derecha (Cobertura) en las tarjetas móviles y botón sin margen interior en tablet.
+- Inicio: «Lo que contratas, por escrito» sustituye a «Todo claro» (sin foto: repetía a la niña del hero en la misma página; el archivo sigue en `public/assets`). «Atención por teléfono, WhatsApp o en persona» presenta la oficina de El Botadero como punto de atención, con las cuatro localidades. Preguntas frecuentes en su propia sección.
+- Titulares y etiquetas: fuera las etiquetas en mayúsculas redundantes y los titulares de dos frases con la segunda en azul en las páginas interiores. Nosotros: sin la numeración 01–07 ni la fila de valores.
+- Denominaciones según los documentos: «Folio de inscripción» (formato de información simplificada) y «Contrato de adhesión registrado ante Profeco» (oficio de registro 349-2025); ya no se usa «aprobado».
+- Cobertura: texto alternativo del hero corregido para que describa la foto.
+- Nosotros: las fotos de la historia se ocultaban a lectores de pantalla en escritorio (panel fijo con `aria-hidden` y figuras con `display: none`); ahora la figura de cada capítulo queda visualmente oculta pero accesible, sin cambio visual.
+- Estilos de la fase en un bloque al final de `clarity.css` (carga después de `refinements.css`), más una regla en `community.css` para la accesibilidad de la historia.
+
+Nosotros en escritorio, pendiente de aprobación: con movimiento reducido o con ventanas de 700 px de alto o menos (`@media (prefers-reduced-motion: reduce), (max-height: 700px)`, anterior a esta fase) la historia pasa a una columna de 860 px y deja vacía la mitad derecha. Con movimiento normal y pantallas altas la composición en dos columnas funciona. Propuesta: en ese modo, cada capítulo con el texto a la izquierda y su foto a la derecha, en su proporción. No implementada.
+
+Pendiente para fase 2: la repetición visual entre heroes (misma mesa, laptop y vestuario en Inicio, Planes, Nosotros, Ayuda y Legal) se resolvió solo en parte; requiere fotos reales o nuevas variantes. La foto vertical de las fiestas patronales mantiene su proporción porque el recorte quitaría los cordeles.
+
+Afirmaciones pendientes de confirmar (no se añadieron ni se retiraron):
+- «Técnicos locales» / «de tu comunidad»: textos existentes sin respaldo documental en este repositorio.
+- Costo de instalación, discrepancia para que el propietario la aclare: el sitio dice que el costo se confirma al revisar el domicilio, pero los seis formatos de información simplificada (`public/docs/formatos`) indican «Cargo por instalación: NO». No se cambió ningún texto.
+- Horarios: el contrato de adhesión registrado indica medios de contacto «disponibles las 24 horas del día los 7 días de la semana»; el sitio no publica horarios.
+- Cobertura en la cabecera municipal y fórmula del recomendador (sin cambios).
+- Se conservan «Servicio mes a mes*» y las referencias al contrato.
+
+Respaldo de lo que el sitio da por confirmado: «sin plazos forzosos» (contrato, cláusula segunda; formatos: plazo mínimo de permanencia N/A); «precios fijos cada mes» (confirmación del usuario en la sesión del 19/10/2026; no hay documento en el repositorio); más de diez años, Botanet → Redixc e internet gratuito para escuelas, clínica y comisariado ejidal (`src/site/community-sources.md`, confirmación del propietario).

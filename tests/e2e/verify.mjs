@@ -60,7 +60,8 @@ async function check(name, fn) {
 }
 
 group("base", async (browser) => {
-  for (const [label, viewport] of [["1440", DESKTOP], ["390", MOBILE]])
+  const PHONE_360 = { width: 360, height: 780, isMobile: true, hasTouch: true };
+  for (const [label, viewport] of [["1440", DESKTOP], ["390", MOBILE], ["360", PHONE_360]])
     for (const route of ROUTES)
       await check(`base ${route} @${label}`, async () => {
         const { page, context, errors } = await open(browser, `${route}?tema=light`, viewport);

@@ -150,6 +150,21 @@
   display: none;
   margin: 24px 0 0;
 }
+/* With the sticky panel on screen (it is aria-hidden), the chapter's own
+   picture stays out of sight but available to screen readers, so the real
+   photos keep their descriptions in reading order. */
+@media (min-width: 701px) and (min-height: 701px) and (prefers-reduced-motion: no-preference) {
+  .community-inline-visual {
+    display: block;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
 .community-years {
   height: 100%;
   display: flex;

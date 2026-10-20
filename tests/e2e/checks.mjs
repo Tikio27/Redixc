@@ -6,15 +6,15 @@ const VISOR = "https://tarifas.ift.org.mx/ift_visor/";
 
 export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKTOP, MOBILE }) {
   group("datos", async (browser) => {
-    await check("datos: IFT number on every plan card", async () => {
+    await check("datos: folio de inscripción on every plan card", async () => {
       const { page, context } = await open(browser, P("/planes"));
       const texts = await page.locator(".all-plans .plan").allTextContents();
       await context.close();
       assert(texts.length === 6, `expected 6 cards, got ${texts.length}`);
       texts.forEach((t, i) =>
         assert(
-          t.includes(`Número de inscripción IFT: ${2233240 + i}`),
-          `card ${i} lacks its IFT number`,
+          t.includes(`Folio de inscripción: ${2233240 + i}`),
+          `card ${i} lacks its folio de inscripción`,
         ),
       );
     });
@@ -32,6 +32,16 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
         await context.close();
         assert(footer.includes(ADDRESS), "footer lacks the published address");
       });
+    await check("datos: Profeco se nombra como registro, no como aprobación", async () => {
+      let found = [];
+      for (const route of ROUTES) {
+        const { page, context } = await open(browser, P(route));
+        const text = await page.evaluate(() => document.body.innerText);
+        await context.close();
+        if (/aprobado por Profeco/i.test(text)) found.push(route);
+      }
+      assert(!found.length, `«aprobado por Profeco» en ${found}`);
+    });
   });
 
   group("recomendador", async (browser) => {
@@ -70,15 +80,15 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
 
   group("planes", async (browser) => {
     for (const [label, viewport] of [["1440", DESKTOP], ["390", MOBILE]]) {
-      await check(`planes: catálogo antes del recomendador plegado @${label}`, async () => {
+      await check(`planes: recomendador plegado antes del catálogo @${label}`, async () => {
         const { page, context } = await open(browser, P("/planes"), viewport);
         const s = await page.evaluate(() => {
           const plan = document.querySelector(".plan");
           const reco = document.querySelector("#recomendador");
           const details = reco?.closest("details.recommender-disclosure");
           return {
-            planFirst: plan && reco && plan.getBoundingClientRect().top <
-              (details || reco).getBoundingClientRect().top,
+            recoFirst: plan && reco &&
+              (details || reco).getBoundingClientRect().top < plan.getBoundingClientRect().top,
             inDetails: !!details,
             open: details?.open,
             summary: details?.querySelector("summary")?.textContent.trim(),
@@ -88,7 +98,7 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
           };
         });
         await context.close();
-        assert(s.planFirst, "first plan card is not above the recommender");
+        assert(s.recoFirst, "the recommender is not above the first plan card");
         assert(s.inDetails && s.open === false, "recommender not in a closed disclosure");
         assert(
           s.summary === "¿No sabes cuál elegir? Te ayudamos a orientarte",
@@ -96,7 +106,7 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
         );
         assert(s.leftovers === 0, `${s.leftovers} filter/compare leftovers`);
       });
-      await check(`planes: tabla de los 6 planes @${label}`, async () => {
+      if (label === "1440") await check(`planes: tabla de los 6 planes @${label}`, async () => {
         const { page, context } = await open(browser, P("/planes"), viewport);
         const rows = await page.locator(".plan-table tbody tr").evaluateAll((trs) =>
           trs.map((tr) => ({
@@ -121,6 +131,52 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
         assert(title.includes("Premium"), `dialog title: ${title}`);
       });
     }
+    for (const [label, viewport] of [["390", MOBILE], ["360", { width: 360, height: 780, isMobile: true, hasTouch: true }]])
+      await check(`planes: tarjetas móviles con lo esencial a la vista @${label}`, async () => {
+        const { page, context } = await open(browser, P("/planes"), viewport);
+        const cards = await page.locator(".all-plans .plan").evaluateAll((cs) =>
+          cs.map((c) => {
+            const shown = (sel) => {
+              const e = c.querySelector(sel);
+              return !!e && e.getBoundingClientRect().height > 0;
+            };
+            return {
+              text: c.innerText,
+              button: shown(".plan-button"),
+              details: shown(".plan-details"),
+              toggle: c.querySelector(".plan-details-toggle")?.getAttribute("aria-expanded"),
+              controls: c.querySelector(".plan-details-toggle")?.getAttribute("aria-controls"),
+              detailsId: c.querySelector(".plan-details")?.id,
+              height: c.getBoundingClientRect().height,
+            };
+          }),
+        );
+        const table = await page.evaluate(() => getComputedStyle(document.querySelector(".plan-table-block")).display);
+        // Keyboard: Tab to the toggle of Plus and open it with Enter.
+        const toggle = page.locator('[data-plan="Plus"] .plan-details-toggle');
+        await toggle.focus();
+        await page.keyboard.press("Enter");
+        await page.waitForTimeout(200);
+        const opened = await page.evaluate(() => {
+          const card = document.querySelector('[data-plan="Plus"]');
+          const t = card.querySelector(".plan-details-toggle");
+          const d = card.querySelector(".plan-details");
+          return { expanded: t.getAttribute("aria-expanded"), shown: d.getBoundingClientRect().height > 0,
+            text: d.innerText, focus: document.activeElement === t };
+        });
+        await context.close();
+        assert(cards.length === 6, `expected 6 cards, got ${cards.length}`);
+        const plus = cards[2].text.replace(/\s+/g, " ");
+        for (const bit of ["Plus", "$400", "MXN / mes", "50 Mbps de bajada", "40 Mbps de subida", "Impuestos incluidos"])
+          assert(plus.includes(bit), `Plus card lacks «${bit}»: ${plus}`);
+        assert(cards.every((c) => c.button), "a card hides its Consultar button");
+        assert(cards.every((c) => !c.details && c.toggle === "false"), "details are not folded by default");
+        assert(cards.every((c) => c.controls && c.controls === c.detailsId), "toggle does not control its details");
+        assert(cards.every((c) => c.height < 280), `card heights ${cards.map((c) => Math.round(c.height))}`);
+        assert(table === "none", `table display ${table}`);
+        assert(opened.expanded === "true" && opened.shown && opened.focus, `opened ${JSON.stringify(opened)}`);
+        assert(/Folio de inscripción: 2233242/.test(opened.text) && /Ficha del plan/.test(opened.text), `details ${opened.text}`);
+      });
     await check("planes: recomendar dentro del plegable enfoca la tarjeta", async () => {
       const { page, context } = await open(browser, P("/planes"), MOBILE);
       await page.locator(".recommender-disclosure summary").click();
@@ -138,16 +194,164 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
     });
     await check("planes: sin scroll horizontal a 320 px", async () => {
       const { page, context } = await open(browser, P("/planes"), { width: 320, height: 700, isMobile: true, hasTouch: true });
-      const s = await page.evaluate(() => {
-        const region = document.querySelector(".plan-table")?.closest(".table-scroll");
-        return {
-          page: document.documentElement.scrollWidth - 320,
-          scrolls: region ? region.scrollWidth > region.clientWidth : null,
-        };
-      });
+      const s = await page.evaluate(() => ({
+        page: document.documentElement.scrollWidth - 320,
+        cards: document.querySelectorAll(".all-plans .plan").length,
+      }));
       await context.close();
       assert(s.page === 0, `page overflow ${s.page}px`);
-      assert(s.scrolls !== null, "table is not inside .table-scroll");
+      assert(s.cards === 6, `${s.cards} cards`);
+    });
+  });
+
+  group("hero-movil", async (browser) => {
+    for (const [label, viewport] of [["390", MOBILE], ["360", { width: 360, height: 780, isMobile: true, hasTouch: true }]])
+      await check(`hero-movil: foto aprobada antes del texto, recorte 16:10 @${label}`, async () => {
+        const { page, context } = await open(browser, P("/"), viewport);
+        const s = await page.evaluate(() => {
+          const shown = (e) => !!e && e.getBoundingClientRect().height > 0;
+          const mobile = document.querySelector(".family-visual-mobile img");
+          const desktop = document.querySelector(".family-visual img");
+          const h1 = document.querySelector(".hero h1");
+          const r = mobile.getBoundingClientRect();
+          const buttons = [...document.querySelectorAll(".hero-buttons .button")].map((b) => b.getBoundingClientRect().height);
+          return {
+            src: new URL(mobile.currentSrc || mobile.src).pathname,
+            mobileShown: shown(mobile),
+            desktopShown: shown(desktop),
+            domBefore: !!(mobile.compareDocumentPosition(h1) & Node.DOCUMENT_POSITION_FOLLOWING),
+            visualBefore: r.bottom <= h1.getBoundingClientRect().top,
+            ratio: r.width / r.height,
+            photoTop: r.top,
+            h1Size: parseFloat(getComputedStyle(h1).fontSize),
+            buttons,
+          };
+        });
+        await context.close();
+        assert(s.src === "/assets/hero-planes.webp", `src ${s.src}`);
+        assert(s.mobileShown && !s.desktopShown, `shown mobile=${s.mobileShown} desktop=${s.desktopShown}`);
+        assert(s.domBefore && s.visualBefore, "photo is not before the headline in DOM and on screen");
+        // 16:10 trims only ceiling and table runner from the 3:2 original.
+        assert(Math.abs(s.ratio - 1.6) < 0.02, `photo ratio ${s.ratio.toFixed(3)} (expected 16:10)`);
+        assert(s.photoTop < 100, `photo starts at ${s.photoTop}px`);
+        assert(s.h1Size >= 36, `h1 ${s.h1Size}px`);
+        assert(s.buttons.every((h) => h >= 44), `button heights ${s.buttons}`);
+      });
+    await check("hero-movil: tablet y escritorio conservan el hero aprobado", async () => {
+      for (const viewport of [DESKTOP, { width: 768, height: 1024 }]) {
+        const { page, context } = await open(browser, P("/"), viewport);
+        const s = await page.evaluate(() => ({
+          mobile: document.querySelector(".family-visual-mobile img").getBoundingClientRect().height,
+          desktop: document.querySelector(".family-visual img").getBoundingClientRect().height,
+        }));
+        await context.close();
+        assert(s.mobile === 0 && s.desktop > 0, `@${viewport.width}: ${JSON.stringify(s)}`);
+      }
+    });
+    await check("hero-movil: botón de plan con margen interior en tablet", async () => {
+      const { page, context } = await open(browser, P("/"), { width: 768, height: 1024 });
+      const s = await page.locator(".preview-plans .plan-button").evaluateAll((bs) =>
+        bs.map((b) => {
+          const r = b.getBoundingClientRect();
+          const range = document.createRange();
+          range.selectNodeContents(b);
+          const t = range.getBoundingClientRect();
+          return { left: t.left - r.left, right: r.right - t.right, fits: b.scrollWidth <= b.clientWidth,
+            oneLine: t.height < 30, height: r.height, font: parseFloat(getComputedStyle(b).fontSize) };
+        }),
+      );
+      await context.close();
+      assert(s.every((b) => b.left >= 10 && b.right >= 10 && b.fits), `buttons ${JSON.stringify(s)}`);
+      assert(s.every((b) => b.oneLine && b.height >= 44 && b.font >= 14), `buttons ${JSON.stringify(s)}`);
+    });
+  });
+
+  group("tarjetas", async (browser) => {
+    const PHONE_360 = { width: 360, height: 780, isMobile: true, hasTouch: true };
+    const PHONE_320 = { width: 320, height: 700, isMobile: true, hasTouch: true };
+    const TABLET = { width: 768, height: 1024 };
+    // WCAG 1.4.12 text spacing, applied to the cards.
+    const SPACING = `.plans-grid .plan * { line-height: 1.5 !important; letter-spacing: 0.12em !important;
+      word-spacing: 0.16em !important; } .plans-grid .plan p { margin-bottom: 2em !important; }`;
+    // Runs in the page: layout facts for every visible card in `sel`.
+    const measure = (sel) => [...document.querySelectorAll(`${sel} .plan`)].map((card) => {
+      const rect = (e) => e?.getBoundingClientRect();
+      const c = rect(card), main = rect(card.querySelector(".plan-head-main")),
+        price = rect(card.querySelector(".plan-price")), h3 = rect(card.querySelector(".plan-head h3"));
+      const hit = (a, b) => a && b && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+      const outside = [...card.querySelectorAll("*")].filter((e) => {
+        const r = e.getBoundingClientRect();
+        return r.width && r.height && !e.closest(".sr-only") && (r.right > c.right + 0.5 || r.left < c.left - 0.5);
+      }).length;
+      return { plan: card.dataset.plan, sameRow: price.top < h3.bottom, overlap: hit(main, price),
+        rightGap: c.right - price.right, outside, button: rect(card.querySelector(".plan-button")).top };
+    });
+    for (const [route, sel] of [["/", ".preview-plans"], ["/cobertura", ".preview-plans"], ["/planes", ".all-plans"]])
+      for (const [label, viewport] of [["1440", DESKTOP], ["768", TABLET], ["390", MOBILE], ["360", PHONE_360], ["320", PHONE_320]])
+        for (const theme of ["light", "dark"])
+          await check(`tarjetas: precio arriba a la derecha sin solapes ${route} @${label} ${theme}`, async () => {
+            const { page, context } = await open(browser, `${route}?tema=${theme}`, viewport);
+            const plain = await page.evaluate(measure, sel);
+            await page.addStyleTag({ content: SPACING });
+            const spaced = await page.evaluate(measure, sel);
+            const overflow = await page.evaluate((w) => document.documentElement.scrollWidth - w, viewport.width);
+            await context.close();
+            for (const cards of [plain, spaced]) {
+              assert(cards.every((c) => !c.overlap), `overlap ${JSON.stringify(cards.filter((c) => c.overlap))}`);
+              assert(cards.every((c) => !c.outside), `content outside a card ${JSON.stringify(cards)}`);
+            }
+            // Phones and desktop keep the price beside the speed; narrow tablet
+            // columns may stack it, but all cards must then agree.
+            if (label !== "768") assert(plain.every((c) => c.sameRow && c.rightGap < 40),
+              `price not top-right ${JSON.stringify(plain)}`);
+            assert(new Set(plain.map((c) => c.sameRow)).size === 1, `mixed layouts ${JSON.stringify(plain)}`);
+            assert(overflow === 0, `page overflow ${overflow}px`);
+          });
+    await check("tarjetas: orden de la tarjeta completa en escritorio", async () => {
+      const { page, context } = await open(browser, P("/planes"));
+      const s = await page.evaluate(() => [...document.querySelectorAll(".all-plans .plan")].map((card) => {
+        const shown = [".plan-top .eyebrow", ".plan-head h3", ".plan-unit", ".plan-tax", ".plan-summary .plan-description",
+          ".plan-summary .plan-use", ".plan-up", ".plan-button", ".plan-foot a", ".plan-ift"]
+          .map((q) => card.querySelector(q)?.getBoundingClientRect());
+        const downs = (card.innerText.match(new RegExp(`\\b${card.querySelector(".plan-head h3 span").textContent} Mbps`, "g")) || []).length;
+        return {
+          plan: card.dataset.plan,
+          ordered: shown.every((r, i) => r && r.height && (i === 0 || r.top >= shown[i - 1].top - 1)),
+          downs,
+          hiddenDetails: getComputedStyle(card.querySelector(".plan-details-summary")).display === "none",
+          toggle: getComputedStyle(card.querySelector(".plan-details-toggle")).display,
+          button: card.querySelector(".plan-button").getBoundingClientRect().top,
+          gap: card.querySelector(".plan-up").getBoundingClientRect().top - card.querySelector(".plan-summary").getBoundingClientRect().bottom,
+        };
+      }));
+      await context.close();
+      assert(s.every((c) => c.ordered), `order ${JSON.stringify(s)}`);
+      assert(s.every((c) => c.downs === 1), `download speed repeated ${JSON.stringify(s.map((c) => [c.plan, c.downs]))}`);
+      assert(s.every((c) => c.hiddenDetails && c.toggle === "none"), "details toggle or duplicate shown on desktop");
+      for (const row of [s.slice(0, 3), s.slice(3)]) {
+        const tops = row.map((c) => c.button);
+        assert(Math.max(...tops) - Math.min(...tops) <= 1, `buttons not aligned ${tops}`);
+      }
+      assert(s.every((c) => c.gap <= 60), `gaps above the upload line ${s.map((c) => Math.round(c.gap))}`);
+    });
+    await check("tarjetas: nombres accesibles y descripción del Plus", async () => {
+      const names = [];
+      for (const [route, sel] of [["/", ".preview-plans"], ["/planes", ".all-plans"]]) {
+        const { page, context } = await open(browser, P(route));
+        names.push(await page.locator(`${sel} [data-plan="Plus"]`).evaluate((card) => ({
+          button: card.querySelector(".plan-button").getAttribute("aria-label"),
+          visible: card.querySelector(".plan-button").innerText.trim(),
+          toggle: card.querySelector(".plan-details-toggle")?.getAttribute("aria-label") || null,
+          text: card.innerText,
+        })));
+        await context.close();
+      }
+      const [home, planes] = names;
+      assert(home.visible === "Consultar plan" && home.button === "Consultar plan Plus", JSON.stringify(home));
+      assert(planes.visible === "Consultar este plan" && planes.button === "Consultar este plan Plus", JSON.stringify(planes));
+      assert(planes.toggle === "Detalles del plan Plus", `toggle ${planes.toggle}`);
+      for (const n of names)
+        assert(n.text.includes("Para estudiar, trabajar y ver contenido en línea."), `Plus text ${n.text}`);
     });
   });
 
@@ -747,8 +951,8 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
       assert(low === 0, `${low} translucent elements`);
     });
     await check("movimiento: tarjetas informativas sin elevación al pasar el cursor", async () => {
-      const { page, context } = await open(browser, M("/nosotros"));
-      const card = page.locator(".values-grid article").first();
+      const { page, context } = await open(browser, M("/ayuda"));
+      const card = page.locator(".help-options article").first();
       await card.scrollIntoViewIfNeeded();
       const before = await card.evaluate((e) => [getComputedStyle(e).transform, getComputedStyle(e).boxShadow]);
       await card.hover();
