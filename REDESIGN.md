@@ -126,3 +126,11 @@ Pendiente en otro PR: las dependencias que solo usaba el sitio anterior (Tailwin
 ## Imagen para redes sociales
 
 `public/og-image-redixc.jpg` (1200 × 630, JPEG de calidad 85, unos 190 KB) reemplaza a la PNG del sitio anterior, que queda en `archive/`. Sigue el hero de Inicio: panel claro con el logo, «FIBRA ÓPTICA · SANTIAGO IXCUINTLA», el eslogan «La fibra que te une al mundo.» con «al mundo.» en acento, «Planes de 30 a 150 Mbps para tu hogar, con atención local», «Desde $300 MXN / mes · impuestos incluidos» y redixc.net, junto a la foto `hero-planes.webp`. Va en JPEG para no pasar del límite aproximado de 300 KB de WhatsApp, y el nombre nuevo hace que las redes descarguen la imagen nueva en lugar de usar la anterior. `index.html` declara su tipo, sus dimensiones y un texto alternativo.
+
+## robots.txt y sitemap.xml
+
+Ahora están en `public/` y salen en el build. Antes estaban fuera del repositorio y se subían a mano al servidor.
+
+- `sitemap.xml` lista las seis páginas (`/`, `/planes`, `/cobertura`, `/nosotros`, `/ayuda` y `/legal`) con `lastmod` 2026-10-19. `/about` sale del sitemap porque redirige a `/nosotros`. Se quitan `priority` y `changefreq`, que Google ignora.
+- `robots.txt` permite todo el sitio, conserva los `Disallow` de rutas del servidor que no forman parte del sitio y apunta al sitemap. Se quitan `Host:`, que Google no usa, y los `Allow` de `/assets/` y `/docs/`, que ya cubría `Allow: /`.
+- `src/site/public-files.test.mjs` comprueba que el sitemap liste exactamente las rutas de `paths` en `App.jsx` y que `robots.txt` no bloquee el sitio.

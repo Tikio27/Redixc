@@ -34,15 +34,34 @@ const dynamic = new Set([
   ...plans.map((p) => formatoUrl(p).slice(1)),
 ]);
 
+// Read by crawlers, not linked from the site.
+const crawlerFiles = new Set(["robots.txt", "sitemap.xml"]);
+
 test("every file in public/ is used by the site", () => {
   const unused = walk(join(root, "public"))
     .map((f) => relative(join(root, "public"), f))
     .filter((f) => !basename(f).startsWith("."))
-    .filter((f) => !dynamic.has(f) && !sources.includes(basename(f)));
+    .filter((f) => !crawlerFiles.has(f) && !dynamic.has(f) && !sources.includes(basename(f)));
   assert.deepEqual(unused, [], `unused public files (move them to archive/): ${unused.join(", ")}`);
 });
 
 test("templated public files exist", () => {
   const files = new Set(walk(join(root, "public")).map((f) => relative(join(root, "public"), f)));
   for (const f of dynamic) assert.ok(files.has(f), `missing public/${f}`);
+});
+
+test("sitemap lists exactly the site's pages", () => {
+  const app = readFileSync(join(root, "src/site/App.jsx"), "utf8");
+  const pathsBlock = app.match(/const paths = \{([^}]*)\}/)[1];
+  const pages = [...pathsBlock.matchAll(/"([^"]+)"/g)].map(([, p]) => `https://redixc.net${p}`);
+  const sitemap = readFileSync(join(root, "public/sitemap.xml"), "utf8");
+  const locs = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(([, l]) => l);
+  assert.deepEqual([...locs].sort(), [...pages].sort());
+});
+
+test("robots.txt allows the site and points to the sitemap", () => {
+  const robots = readFileSync(join(root, "public/robots.txt"), "utf8");
+  assert.match(robots, /^User-agent: \*$/m);
+  assert.doesNotMatch(robots, /^Disallow: \/\s*$/m);
+  assert.match(robots, /^Sitemap: https:\/\/redixc\.net\/sitemap\.xml$/m);
 });

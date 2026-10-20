@@ -1,0 +1,15 @@
+# robots.txt para redixc.net
+# Última actualización: 2026-10-19 (rediseño del sitio)
+
+User-agent: *
+Allow: /
+
+# Rutas del servidor que no forman parte del sitio.
+Disallow: /admin/
+Disallow: /api/
+Disallow: /tmp/
+Disallow: /private/
+Disallow: /login/
+Disallow: /cgi-bin/
+
+Sitemap: https://redixc.net/sitemap.xml
