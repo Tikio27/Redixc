@@ -1043,6 +1043,25 @@ export function registerChecks({ group, check, open, assert, ROUTES, BASE, DESKT
     }
   });
 
+  // Campos de formulario: misma tipografía que el sitio (el navegador da a
+  // <textarea> una fuente monoespaciada) y 16 px en móvil para evitar el zoom.
+  group("formularios", async (browser) => {
+    await check("formularios: campos con la tipografía del sitio y 16 px (móvil)", async () => {
+      const { page, context } = await open(browser, P("/ayuda"), MOBILE);
+      const body = await page.evaluate(() => getComputedStyle(document.querySelector(".app")).fontFamily);
+      const portal = await page.locator("#portal-holder").evaluate((e) => [getComputedStyle(e).fontFamily, parseFloat(getComputedStyle(e).fontSize)]);
+      await page.locator(".help-options article").nth(1).locator("button").click();
+      const details = page.locator("#support-details");
+      await details.waitFor({ state: "visible" });
+      const support = await details.evaluate((e) => [getComputedStyle(e).fontFamily, parseFloat(getComputedStyle(e).fontSize)]);
+      await context.close();
+      for (const [name, [family, size]] of [["#portal-holder", portal], ["#support-details", support]]) {
+        assert(family === body, `${name} usa «${family}», el sitio «${body}»`);
+        assert(size >= 16, `${name} ${size}px`);
+      }
+    });
+  });
+
   // Portal de clientes: enlaces a clientes.redixc.net en una pestaña nueva.
   group("portal", async (browser) => {
     const PORTAL = "https://clientes.redixc.net/";
