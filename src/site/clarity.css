@@ -1,0 +1,1128 @@
+/* Claridad para elegir y contactar (plan 2026-10-19). Loaded last. */
+.hybrid .plan-ift {
+  flex-basis: 100%;
+  font-size: 13px;
+  color: var(--muted);
+}
+.hybrid .footer-contact > .footer-address {
+  align-items: flex-start;
+}
+.hybrid .footer-contact > .footer-address > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+@media (max-width: 600px) {
+  .hybrid .footer-contact > .footer-address {
+    grid-column: 1 / -1;
+    order: 1;
+  }
+}
+
+/* Planes: recomendador plegable y tabla de los 6 planes. */
+.hybrid .recommender-disclosure {
+  margin: 40px 0 8px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+}
+.hybrid .recommender-disclosure > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 64px;
+  padding: 16px 24px;
+  font: 700 18px/1.3 Cerebri, Arial, sans-serif;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  border-radius: 18px;
+}
+.hybrid .recommender-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.hybrid .recommender-disclosure > summary > svg {
+  flex-shrink: 0;
+  color: var(--accent);
+  transition: rotate 150ms ease;
+}
+.hybrid .recommender-disclosure[open] > summary > svg {
+  rotate: 180deg;
+}
+.hybrid .recommender-disclosure > summary:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.hybrid .recommender-disclosure .recommender {
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  padding-top: 0;
+}
+.hybrid .plan-table-block {
+  margin-top: 40px;
+}
+/* Contain positioned descendants so nothing escapes the horizontal scroller. */
+.hybrid .plan-table-block .table-scroll {
+  position: relative;
+}
+.hybrid .plan-table-block > h3 {
+  margin: 0 0 12px;
+  font-size: 20px;
+}
+.hybrid .plan-table {
+  min-width: 620px;
+  font-size: 15px;
+}
+.hybrid .plan-table :is(th, td) {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.hybrid .plan-table thead th {
+  font-size: 13px;
+  color: var(--muted);
+  font-weight: 700;
+}
+.hybrid .plan-table tbody th {
+  position: sticky;
+  left: 0;
+  background: var(--bg);
+  font-weight: 700;
+}
+.hybrid .plan-table :is(a, button) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  color: var(--accent);
+}
+@media (max-width: 600px) {
+  .hybrid .recommender-disclosure > summary {
+    padding: 14px 18px;
+    font-size: 17px;
+  }
+  .hybrid .recommender-disclosure .recommender {
+    padding: 0 18px 20px;
+  }
+}
+
+/* Cobertura: una acción por localidad. */
+.hybrid .coverage-panel > p {
+  margin: 16px 0 0;
+}
+.hybrid :is(.coverage-panel, .home-attention) .locality-list {
+  margin-block: 16px 12px;
+}
+.hybrid :is(.coverage-panel, .home-attention) .locality-list button {
+  min-height: 56px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+.hybrid :is(.coverage-panel, .home-attention) .locality-list button:hover {
+  border-color: var(--accent);
+}
+.hybrid :is(.coverage-panel, .home-attention) .locality-list button > svg:last-child {
+  color: var(--accent);
+}
+
+/* Cabecera compacta en móvil: WhatsApp con texto; el tema pasa al menú.
+   Quitar la clase header-compact de .app restaura la cabecera de V4. */
+.app.header-compact .header .brand {
+  min-height: 44px;
+}
+.app.header-compact .mobile-appearance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0 4px;
+  font-weight: 700;
+}
+@media (max-width: 850px) {
+  .app.header-compact .header-actions > .theme-control {
+    display: none;
+  }
+  .app.hybrid.header-compact .header .whatsapp-nav {
+    display: flex;
+    min-height: 44px;
+    padding: 0 10px;
+    font-size: 15px;
+  }
+  .app.hybrid.header-compact .header .whatsapp-nav > span {
+    display: inline;
+  }
+}
+@media (min-width: 851px) {
+  .app.header-compact .mobile-appearance {
+    display: none;
+  }
+}
+@media (max-width: 600px) {
+  .hybrid :is(.coverage-panel, .home-attention) .locality-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mínimos tipográficos (HIG: 11 pt mínimo; aquí ≥ 12 px en todo el texto).
+   Las reglas originales tienen especificidades muy altas por página; estos
+   mínimos usan !important solo para font-size y solo en elementos medidos. */
+.app.hybrid :is(.eyebrow, .hero-eyebrow, .community-years > span) {
+  font-size: 12px !important;
+  letter-spacing: 0.06em;
+}
+.app.hybrid .community-chapter-label,
+.app.hybrid .community-chapter-label > span {
+  font-size: 12px !important;
+}
+.app.hybrid .plan .plan-top .eyebrow {
+  font-size: 15px !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.app.hybrid :is(.activity small, .document-row p) {
+  font-size: 14px !important;
+  line-height: 1.45;
+}
+.app.hybrid .message-preview > span {
+  font-size: 12px !important;
+  letter-spacing: 0.06em;
+}
+.app.hybrid .modal-plan span {
+  font-size: 13px !important;
+}
+.app.hybrid .document-row > span {
+  font-size: 13px !important;
+}
+.app.hybrid .plan-table {
+  font-size: 15px !important;
+}
+.app.hybrid .plan-table thead th {
+  font-size: 13px !important;
+}
+@media (max-width: 600px) {
+  .app.hybrid .plan .plan-top .eyebrow {
+    font-size: 16px !important;
+  }
+  .app.hybrid :is(.fineprint, .footer-bottom, .coverage-disclaimer) {
+    font-size: 13px !important;
+  }
+}
+
+/* Selectores visibles en lugar de desplegables nativos (pocas opciones:
+   se ven todas y se eligen con un toque; radios nativos para teclado y lector). */
+.app.hybrid :is(.contact-locality, .people-selector) {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.app.hybrid :is(.contact-locality, .people-selector) > legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.app.hybrid .choice-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.app.hybrid .choice,
+.app.hybrid .segmented-choice > label {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.app.hybrid :is(.choice, .segmented-choice > label) > input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.app.hybrid .choice {
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.app.hybrid .choice > svg:first-of-type {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.app.hybrid .choice > .choice-check {
+  margin-left: auto;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+.app.hybrid .choice:hover {
+  border-color: var(--accent);
+}
+.app.hybrid .choice:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+  background: var(--surface);
+}
+.app.hybrid .choice:has(input:checked) > .choice-check {
+  opacity: 1;
+}
+.app.hybrid :is(.choice, .segmented-choice > label):has(input:focus-visible) {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.app.hybrid .people-selector {
+  display: grid;
+  gap: 0;
+  align-content: start;
+}
+.app.hybrid .segmented-choice {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg);
+}
+.app.hybrid .segmented-choice > label {
+  justify-content: center;
+  min-width: 60px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+.app.hybrid .segmented-choice > label:has(input:checked) {
+  background: var(--accent);
+  color: var(--bg);
+}
+@media (max-width: 380px) {
+  .app.hybrid .choice-group {
+    grid-template-columns: 1fr;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app.hybrid :is(.choice, .choice-check, .segmented-choice > label) {
+    transition: none;
+  }
+}
+.app.hybrid .contact-modal .choice {
+  margin: 0;
+}
+.app.hybrid .contact-locality {
+  margin-bottom: 10px;
+}
+.app.hybrid .people-selector {
+  margin-top: 12px;
+}
+.app.hybrid .segmented-choice {
+  justify-self: start;
+  width: max-content;
+}
+@media (max-width: 600px) {
+  /* Names fit on one line: the check mark alone shows the selection. */
+  .app.hybrid .choice > svg:first-of-type {
+    display: none;
+  }
+}
+
+/* Cobertura: aviso único, pasos, atención local y planes. */
+.hybrid :is(.coverage-panel, .home-attention) .coverage-disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  color: var(--ink);
+  font-size: 14px !important;
+}
+.hybrid :is(.coverage-panel, .home-attention) .coverage-disclaimer > svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--accent);
+}
+.hybrid .coverage-info > h2 {
+  margin: 8px 0 20px;
+  font-size: 26px;
+}
+.hybrid .coverage-steps {
+  display: grid;
+  gap: 18px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hybrid .coverage-steps > li {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.hybrid .coverage-step-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--accent);
+}
+.hybrid .coverage-step-number {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+.hybrid .coverage-steps h3 {
+  margin: 2px 0 4px;
+  font-size: 18px;
+}
+.hybrid .coverage-steps p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.hybrid .coverage-office {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  align-items: center;
+  padding-block: 56px;
+  border-top: 1px solid var(--line);
+}
+.hybrid .coverage-office figure {
+  margin: 0;
+}
+.hybrid .coverage-office img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 18px;
+}
+.hybrid .coverage-office figcaption {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.hybrid .coverage-office figcaption a {
+  color: var(--accent);
+}
+.hybrid .coverage-office-copy h2 {
+  margin: 8px 0 12px;
+  font-size: 34px;
+}
+.hybrid .coverage-office-copy > p {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+.hybrid .coverage-office address {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.hybrid .coverage-office address > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent);
+}
+.hybrid .coverage-office-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.hybrid .coverage-office-actions .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+}
+.hybrid .contact-modal #contact-address {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.hybrid .contact-modal #contact-address:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.hybrid .contact-modal label[for="contact-address"] {
+  display: block;
+  margin: 4px 0 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+@media (max-width: 850px) {
+  .hybrid .coverage-office {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-block: 40px;
+  }
+  .hybrid .coverage-office-copy h2 {
+    font-size: 28px;
+  }
+}
+
+/* Inicio: los tres beneficios alineados por arriba (títulos e iconos a la
+   misma altura) aunque el tercero sea más alto por su enlace. */
+.app.hybrid .home-benefits {
+  align-items: stretch;
+}
+.app.hybrid .home-benefits .home-benefit {
+  align-items: flex-start;
+}
+.app.hybrid .home-benefits .home-benefit > svg {
+  margin-top: 2px;
+}
+/* Inicio: enlace a la historia dentro del tercer beneficio. */
+.hybrid .home-benefit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 44px;
+  font-size: 14px;
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  /* The last benefit had its own padding (19px 6px) and drifted right. */
+  .app.hybrid .home-benefits .home-benefit:last-child {
+    padding: 0 0 4px;
+  }
+  .app.hybrid .home-benefits .home-benefit {
+    align-items: flex-start;
+  }
+  .app.hybrid .home-benefits .home-benefit > svg {
+    margin-top: 2px;
+  }
+}
+
+/* ── Fase 1 de la auditoría (hero móvil, tarjeta de plan, Inicio) ──────────
+   Bloque acotado: solo lo necesario para estos hallazgos. Va al final porque
+   las reglas anteriores tienen especificidades altas por página. */
+
+/* Hero de Inicio en móvil: la foto aprobada va antes del texto. 16:10 recorta
+   solo techo y mantel (caras, laptop y taza quedan dentro); el texto empieza
+   justo bajo la foto, sin tocar tamaños de letra ni áreas táctiles. */
+.family-visual-mobile {
+  display: none;
+}
+@media (max-width: 600px) {
+  .app.hybrid .hero-family {
+    row-gap: 0;
+  }
+  .app.hybrid .hero-family .family-visual {
+    display: none;
+  }
+  .app.hybrid .hero-family .family-visual-mobile {
+    display: block;
+  }
+  .family-visual-mobile img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: 50% 40%;
+  }
+  .homepage-v5.hybrid.page-inicio .hero-copy {
+    text-align: left;
+    padding-top: 20px;
+  }
+  .homepage-v5.hybrid.page-inicio .hero-copy .hero-eyebrow {
+    margin-bottom: 10px;
+  }
+  .homepage-v5.hybrid.page-inicio .hero-copy > p {
+    margin-top: 14px;
+  }
+  .homepage-v5.hybrid.page-inicio .hero-offer {
+    align-items: flex-start;
+    margin-top: 16px;
+  }
+  .homepage-v5.hybrid.page-inicio .hero-buttons {
+    margin-top: 18px;
+  }
+}
+
+/* Tarjeta de plan (Inicio, Cobertura y Planes): cabecera común con nombre y
+   bajada a la izquierda y precio a la derecha. flex-wrap apila el precio
+   bajo la velocidad cuando no caben (columna estrecha o texto ampliado). */
+.app.hybrid .plans-grid .plan {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  text-align: left;
+}
+.app.hybrid .plans-grid .plan > * {
+  grid-column: auto;
+  grid-row: auto;
+}
+.app.hybrid .plans-grid .plan .plan-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px 16px;
+}
+.app.hybrid .plans-grid .plan .plan-head-main {
+  min-width: 0;
+}
+.app.hybrid .plans-grid .plan .plan-head h3 {
+  display: block;
+  margin: 8px 0 0;
+  line-height: 1;
+}
+.app.hybrid .plans-grid .plan .plan-head h3 .plan-down-label {
+  display: block;
+  margin-top: 6px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+.app.hybrid .plans-grid .plan .plan-head .plan-price {
+  flex: 0 0 auto;
+  align-self: flex-start;
+  margin: 0;
+  padding-top: 34px;
+  text-align: right;
+  line-height: 1;
+}
+.app.hybrid .plans-grid .plan .plan-head .plan-price small {
+  display: block;
+  margin: 6px 0 0;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+.app.hybrid .plans-grid .plan .plan-head .plan-price .plan-tax {
+  margin-top: 4px;
+  font-size: 13px;
+}
+.app.hybrid .plans-grid .plan .plan-up {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+  font-size: 14px;
+}
+.app.hybrid .plans-grid .plan .plan-up > svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.app.hybrid .plans-grid .plan .plan-description {
+  min-height: 0;
+  max-width: none;
+  margin: 10px 0 0;
+  padding: 0;
+  border: 0;
+}
+.app.hybrid .plans-grid .plan .plan-use {
+  margin: 6px 0 0;
+}
+.app.hybrid .plans-grid .plan .plan-button {
+  margin-top: auto;
+  align-self: stretch;
+  justify-content: center;
+}
+/* Space above the button; margin-top: auto above keeps buttons aligned. */
+.app.hybrid .preview-plans .plan .plan-description {
+  margin-bottom: 18px;
+}
+.hybrid .recommend-label {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Tarjeta completa (Planes). Escritorio: nombre, bajada y precio,
+   impuestos, descripción y uso, subida, botón, ficha y folio. La subida
+   lleva margin-top: auto para alinear los botones entre tarjetas. */
+.hybrid .plan-details-toggle,
+.hybrid .plan-details-summary {
+  display: none;
+}
+.app.hybrid .all-plans .plan .plan-summary {
+  margin-top: 6px;
+}
+.app.hybrid .all-plans .plan .plan-up {
+  margin-top: auto;
+  padding-top: 16px;
+}
+.app.hybrid .all-plans .plan .plan-button {
+  margin-top: 16px;
+}
+.app.hybrid .all-plans .plan .plan-foot {
+  margin-top: 18px;
+}
+.hybrid .recommender-disclosure {
+  margin-bottom: 32px;
+}
+.hybrid .all-plans .plan {
+  scroll-margin-block: calc(var(--nav-height, 64px) + 16px) 16px;
+}
+@media (max-width: 600px) {
+  .app.hybrid .all-plans .plan {
+    padding: 18px 18px 6px;
+  }
+  .app.hybrid .all-plans .plan .plan-head h3 > span {
+    font-size: 34px;
+  }
+  .app.hybrid .all-plans .plan .plan-head h3 > small:not(.plan-down-label) {
+    font-size: 18px;
+  }
+  .app.hybrid .all-plans .plan .plan-head .plan-price {
+    padding-top: 30px;
+    font-size: 26px;
+  }
+  .app.hybrid .all-plans .plan .plan-summary {
+    display: none;
+  }
+  .app.hybrid .all-plans .plan .plan-up {
+    margin-top: 10px;
+    padding-top: 0;
+    font-size: 15px;
+  }
+  .app.hybrid .all-plans .plan .plan-button {
+    margin-top: 14px;
+  }
+  .app.hybrid .plan-details-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    min-height: 44px;
+    margin-top: 2px;
+    color: var(--accent);
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .app.hybrid .plan-details-toggle > svg {
+    transition: rotate 0.2s ease;
+  }
+  .app.hybrid .plan-details-toggle[aria-expanded="true"] > svg {
+    rotate: 180deg;
+  }
+  .app.hybrid .all-plans .plan .plan-details {
+    display: none;
+    padding-bottom: 12px;
+  }
+  .app.hybrid .all-plans .plan.details-open .plan-details {
+    display: block;
+  }
+  .app.hybrid .all-plans .plan .plan-details-summary {
+    display: block;
+  }
+  .app.hybrid .all-plans .plan .plan-details .plan-description {
+    margin-top: 6px;
+    font-size: 15px;
+  }
+  .app.hybrid .all-plans .plan .plan-details .plan-use {
+    font-size: 14px;
+  }
+  .app.hybrid .all-plans .plan .plan-details .plan-foot {
+    font-size: 13px;
+  }
+  /* La tabla repetía los mismos datos con scroll lateral; en móvil las
+     tarjetas ya muestran precio, bajada, subida, ficha y consulta. */
+  .app.hybrid .plan-table-block {
+    display: none;
+  }
+}
+/* Tablet: tres tarjetas resumidas de unos 220 px; menos padding lateral
+   para que «Consultar plan» quepa en una línea sin reducir la letra. */
+@media (min-width: 601px) and (max-width: 850px) {
+  .app.hybrid .preview-plans .plan {
+    padding-inline: 20px;
+  }
+  /* Here the price always stacks under the speed: align it with it. */
+  .app.hybrid .preview-plans .plan .plan-head .plan-price {
+    padding-top: 6px;
+    text-align: left;
+  }
+  .app.hybrid .preview-plans .plan-button {
+    padding-inline: 14px;
+    gap: 6px;
+    white-space: nowrap;
+  }
+}
+
+/* Recomendador: etiqueta del resultado en minúsculas y legible. */
+.hybrid .recommend-kicker {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+/* Inicio: «Lo que contratas, por escrito». */
+.hybrid .home-written {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 24px 64px;
+  align-items: start;
+  margin-block: 24px 64px;
+  padding: 44px 48px;
+  background: var(--surface);
+  border-radius: 22px;
+}
+.hybrid .home-written h2 {
+  font-size: 34px;
+  line-height: 1.12;
+  letter-spacing: -0.8px;
+}
+.hybrid .home-written ul {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.hybrid .home-written li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  font-size: 17px;
+  line-height: 1.5;
+}
+.hybrid .home-written li > svg {
+  flex-shrink: 0;
+  color: var(--accent);
+}
+.hybrid .home-written .hero-buttons {
+  margin-top: 28px;
+}
+
+/* Inicio: atención por localidad con el punto de atención. */
+.hybrid .home-attention {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+  padding-block: 24px 40px;
+}
+.hybrid .home-attention figure {
+  margin: 0;
+}
+.hybrid .home-attention figure img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 18px;
+}
+.hybrid .home-attention figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.hybrid .home-attention figcaption a {
+  color: var(--accent);
+}
+.hybrid .home-attention h2 {
+  font-size: 34px;
+  line-height: 1.12;
+  letter-spacing: -0.8px;
+}
+.hybrid .home-attention-copy > p {
+  margin-top: 14px;
+  font-size: 16px;
+}
+.hybrid .home-attention .locality-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.hybrid .home-attention-contact {
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  margin-top: 22px;
+}
+.hybrid .home-attention .home-help-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  color: var(--accent);
+  font-family: Cerebri, Arial, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+}
+.hybrid .home-attention address {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.hybrid .home-attention address > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--accent);
+}
+.hybrid .home-faq {
+  padding-top: 40px;
+}
+@media (max-width: 850px) {
+  .hybrid .home-written,
+  .hybrid .home-attention {
+    grid-template-columns: 1fr;
+  }
+  .hybrid .home-attention {
+    gap: 28px;
+  }
+}
+@media (max-width: 600px) {
+  .hybrid .home-written {
+    width: calc(100% - 32px);
+    padding: 28px 22px;
+    margin-block: 8px 40px;
+  }
+  .hybrid :is(.home-written, .home-attention) h2 {
+    font-size: 28px;
+  }
+  .hybrid .home-attention {
+    width: calc(100% - 32px);
+  }
+  .hybrid .home-attention .locality-list {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Nosotros: sin contador 01/07; el nombre del capítulo queda como guía. */
+.hybrid .community-progress > span:first-child {
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+/* Portal de clientes (clientes.redixc.net): acceso en la navegación y en Ayuda.
+   Se abre en una pestaña nueva; el portal gestiona el inicio de sesión. */
+:root {
+  --danger: #b42318;
+}
+:root[data-theme="dark"] {
+  --danger: #fda29b;
+}
+.hybrid .desktop-nav .nav-portal {
+  gap: 6px;
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.hybrid .desktop-nav .nav-portal svg {
+  flex: none;
+}
+.hybrid .help-options .help-portal {
+  grid-column: 1 / -1;
+}
+.hybrid .help-options .help-portal > .button {
+  margin-top: 0;
+}
+.hybrid .help-portal-note {
+  margin: 18px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+.hybrid .help-portal-form {
+  width: 100%;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.hybrid .help-portal-form .help-portal-note {
+  margin: 0 0 14px;
+  max-width: 62ch;
+}
+.hybrid .help-portal-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.hybrid .help-portal-row {
+  max-width: 680px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.hybrid .help-portal-row input {
+  flex: 1 1 260px;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+.hybrid .help-portal-row input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+.hybrid .help-portal-row input[aria-invalid="true"] {
+  border-color: var(--danger);
+}
+.hybrid .help-portal-row .button {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+.hybrid .help-portal-error {
+  min-height: 1.5em;
+  margin: 8px 0 0;
+  color: var(--danger);
+  font-size: 14px;
+  font-weight: 700;
+}
+@media (max-width: 600px) {
+  .hybrid .help-portal-row .button {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+@media (max-width: 1100px) and (min-width: 851px) {
+  .hybrid .desktop-nav .nav-portal {
+    padding-left: 15px;
+  }
+}
+/* Móvil y tableta (sin navegación de escritorio): enlace visible en la cabecera,
+   con el mismo tratamiento que en escritorio (icono y texto en acento, sin caja).
+   En teléfonos WhatsApp queda solo con su icono para dejarle espacio. */
+.hybrid .header .header-portal {
+  display: none;
+}
+@media (max-width: 850px) {
+  .hybrid .header .header-portal {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 4px;
+    color: var(--accent);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .hybrid .header .header-portal svg {
+    flex: none;
+  }
+  .hybrid .header .header-portal:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+@media (max-width: 600px) {
+  .app.hybrid.header-compact .header .whatsapp-nav > span {
+    display: none;
+  }
+  .app.hybrid.header-compact .header .whatsapp-nav {
+    justify-content: center;
+    width: 44px;
+    padding: 0;
+  }
+  .app.hybrid.header-compact .header .whatsapp-nav svg {
+    margin: 0;
+  }
+}
+/* En teléfonos el icono cede su espacio al logo. */
+@media (max-width: 430px) {
+  .hybrid .header .header-portal svg {
+    display: none;
+  }
+}
+@media (max-width: 345px) {
+  .hybrid .header .header-portal {
+    padding: 0;
+    font-size: 13px;
+  }
+}
+/* Justo encima del menú móvil no caben el icono ni la separación completa. */
+@media (max-width: 920px) and (min-width: 851px) {
+  .hybrid .desktop-nav {
+    gap: 12px;
+  }
+  .hybrid .desktop-nav .nav-portal {
+    padding-left: 12px;
+  }
+  .hybrid .desktop-nav .nav-portal svg {
+    display: none;
+  }
+}
+
+/* Logo: 150 px en escritorio y tableta; en anchos menores ocupa todo el espacio
+   que deja la cabecera (se encoge solo él, sin desbordar ni partir enlaces). */
+.app.hybrid .header .brand {
+  flex: 0 1 150px;
+  width: auto;
+  min-width: 0;
+  max-width: 150px;
+}
+.app.hybrid .header .desktop-nav,
+.app.hybrid .header .header-actions {
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .app.hybrid .header .brand {
+    margin-right: 10px;
+  }
+}
+
+/* Planes: el recomendador plegado abre la sección (va antes del catálogo).
+   Sin su margen superior ni el padding de la sección, el espacio bajo la foto es
+   el mismo que en Ayuda, Legal y Cobertura (32 px en móvil, 44 en escritorio). */
+.hybrid .section > .recommender-disclosure:first-child {
+  margin-top: 0;
+}
+.app.hybrid.page-planes .page-intro + .section {
+  padding-top: 0;
+}
