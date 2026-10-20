@@ -23,16 +23,12 @@
 }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .app.motion-purposeful
-      main
-      :is(
-        .plans-grid,
-        .connection-step-grid,
-        .values-grid,
-        .help-options,
-        .clarity-photo,
-        .plan-table-block
-      ) {
+    .app.motion-purposeful main .plans-grid,
+    .app.motion-purposeful main .connection-step-grid,
+    .app.motion-purposeful main .values-grid,
+    .app.motion-purposeful main .help-options,
+    .app.motion-purposeful main .clarity-photo,
+    .app.motion-purposeful main .plan-table-block {
       animation: purposeful-enter linear both;
       animation-timeline: view();
       animation-range: entry 0% entry 35%;
